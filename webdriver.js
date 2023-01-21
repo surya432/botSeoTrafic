@@ -90,6 +90,7 @@ class DriveOtomatis {
             // driver.withCapabilities(chromeCapabilities);
             console.log("dasda", JSON.stringify(driver))
             this.driver = driver.build();
+            this.Qualityvideo144 = false;
         } catch (error) {
             console.log("constructor", error);
         }
@@ -258,7 +259,9 @@ class DriveOtomatis {
     }
     async changeQuality() {
         try {
-
+            if (this.Qualityvideo144 == true) {
+                return
+            }
             let videoQuality = await this.driver.findElements(By.css(`button.ytp-button.ytp-settings-button`));
             if (videoQuality.length > 0) {
                 await this.driver.findElement(By.css(`button.ytp-button.ytp-settings-button`)).click();
@@ -270,9 +273,11 @@ class DriveOtomatis {
                 if (haveQuality144.length > 0) {
                     await this.driver.findElement(By.xpath(`//span[contains(text(),'144p')]`)).click();
                     await this.driver.sleep(getRndInteger(1000, 2000));
+                    this.Qualityvideo144 = true;
                 } else if (haveQuality360.length > 0) {
                     await this.driver.findElement(By.xpath(`//span[contains(text(),'360p')]`)).click();
                     await this.driver.sleep(getRndInteger(1000, 2000));
+                    this.Qualityvideo144 = true;
                 }
 
             }
