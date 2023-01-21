@@ -1,7 +1,7 @@
 const chromeWebDriver = require("selenium-webdriver/chrome"),
     proxy = require('selenium-webdriver/proxy'),
     firefox = require("selenium-webdriver/firefox");
-const { By, until, Capabilities, Builder, Key, Browser } = require("selenium-webdriver");
+const { By, until, Capabilities, Builder, Key, Browser, Actions } = require("selenium-webdriver");
 const chromedriverPath = require("chromedriver").path
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -91,6 +91,7 @@ class DriveOtomatis {
             console.log("dasda", JSON.stringify(driver))
             this.driver = driver.build();
             this.Qualityvideo144 = false;
+            this.watchingTime = 0
         } catch (error) {
             console.log("constructor", error);
         }
@@ -239,16 +240,22 @@ class DriveOtomatis {
                 return;
             }
             await this.driver.findElement(By.xpath(`//a[contains(@href,'${videoId}')]`)).click()
-            await this.driver.sleep(getRndInteger(2000, 3000));
-            let watchingTime = 0
+            await this.driver.sleep(getRndInteger(4000, 5000));
+            this.watchingTime = 0
+            let sd = '';
             do {
                 await this.checkAdsYoutube();
-                await this.changeQuality();
-                await this.driver.sleep(5000);
-                watchingTime = watchingTime + 5000;
-                console.log('watchingTime ' + watchingTime + " dari " + watchingTimeLimit)
-                console.log('watching ' + watchingTime >= watchingTimeLimit)
-            } while (watchingTime <= watchingTimeLimit);
+                const ads = await this.driver.findElements(
+                    By.xpath("//div[contains(@class,'ytp-ad-player-overlay')]")
+                );
+                if (ads.length == 0) {
+                    await this.changeQuality();
+                    this.watchingTime = this.watchingTime + 1000;
+                    await this.driver.sleep(1000);
+                }
+                console.log('watchingTime ' + this.watchingTime + " dari " + watchingTimeLimit)
+                console.log('watching ' + this.watchingTime >= watchingTimeLimit)
+            } while (this.watchingTime <= watchingTimeLimit);
             return;
             // }
         } catch (error) {
@@ -290,7 +297,6 @@ class DriveOtomatis {
     async checkAdsYoutube() {
         try {
             let msg = "Ads Not Found";
-            // for (let i = 0; true; i++) {
             let dataAds = await this.driver.findElements(
                 By.xpath("//div[contains(@class,'ytp-ad-player-overlay')]")
             );
@@ -299,20 +305,20 @@ class DriveOtomatis {
                 let btn_skip_ads = By.xpath(
                     '//span[@class="ytp-ad-skip-button-container"]["style=opacity:0.5;"]'
                 );
-                let findBtnSkipAds = this.driver.findElement(btn_skip_ads);
-
-                let readyToSkip = await this.driver
-                    .wait(until.elementIsVisible(findBtnSkipAds), 30000);
-                if (readyToSkip) {
-                    console.log("ads Click");
-                    findBtnSkipAds.click();
-                } else {
-                    return
+                var das = await this.driver.wait(until.elementLocated(btn_skip_ads), 30000, "not found skip ads", 1000);
+                if (das) {
+                    let findBtnSkipAds = this.driver.findElement(btn_skip_ads);
+                    let readyToSkip = await this.driver.wait(until.elementIsVisible(findBtnSkipAds), 30000);
+                    if (readyToSkip) {
+                        console.log("ads Click");
+                        findBtnSkipAds.click();
+                    } else {
+                        return
+                    }
                 }
-                // break;
             }
         } catch (error) {
-            console.log(error);
+            console.log("checkAdsYoutube Err", error);
             return
         }
     }
@@ -329,7 +335,9 @@ const urlList = [
     { keyword: "tutorialkodingku.com", url: 'https://tutorialkodingku.com', type: "website" },
     { keyword: "Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=4W__cLYipXw', type: "youtube" },
     { keyword: "Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=4qdloLwFTKI', type: "youtube" },
+    { keyword: "tutorialkodingku.com", url: 'https://tutorialkodingku.com', type: "website" },
     { keyword: "Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=DKb284no7aE', type: "youtube" },
+    { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "website" },
 ]
 const run = async () => {
     // do {
