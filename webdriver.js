@@ -11,6 +11,7 @@ const readline = require('readline');
 const moment = require("moment/moment");
 const { default: axios } = require("axios");
 const { Platform } = require("selenium-webdriver/lib/capabilities");
+let watchingTimeLimit = 5 * 60 * 1000;
 
 function convert(file) {
 
@@ -103,8 +104,7 @@ class DriveOtomatis {
         await this.driver.sleep(getRndInteger(3000, 5000));
 
     }
-    async SeoDrive({ url, keyword }) {
-
+    async SeoWebsite({ url, keyword }) {
         try {
             if (this.driver == null) {
                 return;
@@ -185,6 +185,132 @@ class DriveOtomatis {
             console.log(error);
         }
     }
+    async youtube_parser(url) {
+        var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+        var match = url.match(regExp);
+        return (match && match[7].length == 11) ? match[7] : false;
+    }
+    async SeoYoutube({ url, keyword }) {
+        try {
+            if (this.driver == null) {
+                return;
+            };
+            const videoId = await this.youtube_parser(url);
+            console.log()
+            await this.driver.get('https://youtube.com/');
+            await this.driver.sleep(getRndInteger(3000, 5000));
+            if (keyword == null) return;
+            await this.driver.findElement(By.name("search_query")).click()
+            await this.driver.sleep(getRndInteger(3000, 5000));
+            await this.driver.findElement(By.name("search_query")).sendKeys(keyword)
+            await this.driver.findElement(By.xpath("//button[@id='search-icon-legacy']/yt-icon")).click()
+            await this.driver.sleep(getRndInteger(3000, 5000));
+            let searchFound = await this.driver.wait(until.titleContains(keyword))
+            if (!searchFound) return;
+            let isFound = false;
+            let ScrollSearch = 2000;
+            for (let i = 0; true; i++) {
+                let marchingVideo = await this.driver
+                    .findElements(By.xpath(`//a[contains(@href,'${videoId}')]`))
+                console.log('search marchingVideo ' + marchingVideo.length)
+                if (marchingVideo.length !== 0) {
+                    console.log('search found')
+                    isFound = true;
+                    break;
+                }
+                let no_result = await this.driver.findElements(
+                    By.xpath(
+                        `//*[@id="message"][@class="style-scope ytd-message-renderer"]`
+                    )
+                )
+                // if (no_result) {
+                //     break;
+                // }
+                console.log('search ' + i)
+                await this.driver.executeScript(`window.scrollTo(0,${ScrollSearch} );`);
+                ScrollSearch += 5000;
+                await this.driver.sleep(getRndInteger(2000, 3000));
+                if (i >= 10) break;
+            }
+
+            if (!isFound) {
+                console.log('search notfound')
+                return;
+            }
+            await this.driver.findElement(By.xpath(`//a[contains(@href,'${videoId}')]`)).click()
+            await this.driver.sleep(getRndInteger(2000, 3000));
+            let watchingTime = 0
+            do {
+                await this.checkAdsYoutube();
+                await this.changeQuality();
+                await this.driver.sleep(5000);
+                watchingTime = watchingTime + 5000;
+                console.log('watchingTime ' + watchingTime + " dari " + watchingTimeLimit)
+                console.log('watching ' + watchingTime >= watchingTimeLimit)
+            } while (watchingTime <= watchingTimeLimit);
+            return;
+            // }
+        } catch (error) {
+            console.log(error);
+            return
+        }
+
+    }
+    async changeQuality() {
+        try {
+
+            let videoQuality = await this.driver.findElements(By.css(`button.ytp-button.ytp-settings-button`));
+            if (videoQuality.length > 0) {
+                await this.driver.findElement(By.css(`button.ytp-button.ytp-settings-button`)).click();
+                await this.driver.sleep(getRndInteger(1000, 2000));
+                await this.driver.findElement(By.xpath(`//div[contains(text(),'Quality')]`)).click();
+                await this.driver.sleep(getRndInteger(1000, 2000));
+                const haveQuality144 = await this.driver.findElements(By.xpath(`//span[contains(text(),'144p')]`));
+                const haveQuality360 = await this.driver.findElements(By.xpath(`//span[contains(text(),'360p')]`));
+                if (haveQuality144.length > 0) {
+                    await this.driver.findElement(By.xpath(`//span[contains(text(),'144p')]`)).click();
+                    await this.driver.sleep(getRndInteger(1000, 2000));
+                } else if (haveQuality360.length > 0) {
+                    await this.driver.findElement(By.xpath(`//span[contains(text(),'360p')]`)).click();
+                    await this.driver.sleep(getRndInteger(1000, 2000));
+                }
+
+            }
+            console.log('quality video ', videoQuality.length)
+        } catch (error) {
+            console.log("changeQuality", error)
+            return
+        }
+    }
+    async checkAdsYoutube() {
+        try {
+            let msg = "Ads Not Found";
+            // for (let i = 0; true; i++) {
+            let dataAds = await this.driver.findElements(
+                By.xpath("//div[contains(@class,'ytp-ad-player-overlay')]")
+            );
+            if (dataAds.length > 0) {
+                msg = "Ads Found";
+                let btn_skip_ads = By.xpath(
+                    '//span[@class="ytp-ad-skip-button-container"]["style=opacity:0.5;"]'
+                );
+                let findBtnSkipAds = this.driver.findElement(btn_skip_ads);
+
+                let readyToSkip = await this.driver
+                    .wait(until.elementIsVisible(findBtnSkipAds), 30000);
+                if (readyToSkip) {
+                    console.log("ads Click");
+                    findBtnSkipAds.click();
+                } else {
+                    return
+                }
+                // break;
+            }
+        } catch (error) {
+            console.log(error);
+            return
+        }
+    }
     async removeDrive() {
         if (this.driver == null) {
             return;
@@ -193,9 +319,12 @@ class DriveOtomatis {
     }
 }
 const urlList = [
-    { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/' },
-    { keyword: "afanlogamlestari", url: 'https://afanlogamlestari.co.id/' },
-    { keyword: "tutorialkodingku.com", url: 'https://tutorialkodingku.com/' },
+    { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "website" },
+    { keyword: "afanlogamlestari", url: 'https://afanlogamlestari.co.id/', type: "website" },
+    { keyword: "tutorialkodingku.com", url: 'https://tutorialkodingku.com', type: "website" },
+    { keyword: "Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=4W__cLYipXw', type: "youtube" },
+    { keyword: "Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=4qdloLwFTKI', type: "youtube" },
+    { keyword: "Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=DKb284no7aE', type: "youtube" },
 ]
 const run = async () => {
     // do {
@@ -205,7 +334,11 @@ const run = async () => {
         const Drive = new DriveOtomatis({ url: '', username: 'surya432', password: 'surya4321' });
         // const Drive = new DriveOtomatis({ url: proxy, username: 'surya123-1', password: 'surya432' });
         // await Drive.myIp();
-        await Drive.SeoDrive(url)
+        if (url.type != 'youtube') {
+            await Drive.SeoWebsite(url);
+        } else {
+            await Drive.SeoYoutube(url);
+        }
         await Drive.removeDrive()
     } catch (error) {
         console.log(error);
