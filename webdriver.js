@@ -334,6 +334,7 @@ const urlList = [
     { keyword: "afanlogamlestari", url: 'https://afanlogamlestari.co.id/', type: "website" },
     { keyword: "tutorialkodingku.com", url: 'https://tutorialkodingku.com', type: "website" },
     { keyword: "Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=4W__cLYipXw', type: "youtube" },
+    { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "website" },
     { keyword: "Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=4qdloLwFTKI', type: "youtube" },
     { keyword: "tutorialkodingku.com", url: 'https://tutorialkodingku.com', type: "website" },
     { keyword: "Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=DKb284no7aE', type: "youtube" },
