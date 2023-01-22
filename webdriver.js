@@ -6,6 +6,8 @@ const chromedriverPath = require("chromedriver").path
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+const chromePaths = require('chrome-paths');
+
 const fs = require('fs');
 const readline = require('readline');
 const moment = require("moment/moment");
@@ -38,20 +40,24 @@ function convert(file) {
 class DriveOtomatis {
     constructor({ url, username, password }) {
         try {
+            console.log('chormepath', chromePaths.chrome)
             var chromeCapabilities = Capabilities.chrome();
             chromeCapabilities.setPageLoadStrategy("normal");
             chromeCapabilities.setAcceptInsecureCerts(true);
+            chromeCapabilities.setLoggingPrefs()
             if (url) {
-                chromeCapabilities.setProxy(proxy.manual({ http: "http://" + url }))
+                chromeCapabilities.setProxy(proxy.manual({ http: url }))
             }
             var chromeOptions = new chromeWebDriver.Options();
-
+            chromeOptions.merge(chromeCapabilities)
             chromeOptions.detachDriver(true);
             // chromeOptions.setChromeBinaryPath('chromedriver.exe');
+            chromeOptions.setChromeBinaryPath(chromePaths.chrome);
             chromeOptions.excludeSwitches(["enable-automation"]);
             chromeOptions.set("useAutomationExtension", false);
             chromeOptions.addArguments("start-maximized");
             chromeOptions.addArguments('autodetect=false');
+            chromeOptions.addArguments('profile-directory=Default');
             // const randomOS = [Platform.MAC, Platform.LINUX, Platform.WINDOWS];
             // chromeOptions.setPlatform(randomOS[Math.floor(Math.random() * randomOS.length)])
             // const deviceName = ['iPhone SE', 'iPhone XR', 'iPhone 12 Pro', 'iPhone X',    'PIXEL 5'];
@@ -77,17 +83,17 @@ class DriveOtomatis {
             //     console.log('proxy', url)
             // }
 
+            console.log('chromeOptuions', JSON.stringify(chromeOptions))
             var firefoxOptions = new firefox.Options();
             firefoxOptions.addArguments("start-maximized")
             firefoxOptions.addArguments('--headless')
             firefoxOptions.setBinary("C:\\Program Files\\Mozilla Firefox\\firefox.exe")
             var driver = new Builder();
             driver.forBrowser(Browser.CHROME)
-            driver.setChromeService(new chromeWebDriver.ServiceBuilder('chromedriver.exe'))
+            // driver.setChromeService(new chromeWebDriver.ServiceBuilder('chromedriver.exe'))
             driver.setChromeOptions(chromeOptions)
             driver.setFirefoxOptions(firefoxOptions)
-            driver.setFirefoxService(new firefox.ServiceBuilder('geckodriver.exe'))
-            // driver.withCapabilities(chromeCapabilities);
+            // driver.setFirefoxService(new firefox.ServiceBuilder('geckodriver.exe'))
             console.log("dasda", JSON.stringify(driver))
             this.driver = driver.build();
             this.Qualityvideo144 = false;
@@ -284,7 +290,6 @@ class DriveOtomatis {
             await this.driver.findElement(By.xpath(`//a[contains(@href,'${videoId}')]`)).click()
             await this.driver.sleep(getRndInteger(4000, 5000));
             this.watchingTime = 0
-            let sd = '';
             do {
                 await this.checkAdsYoutube();
                 const ads = await this.driver.findElements(
@@ -404,7 +409,7 @@ const run = async () => {
         console.log(error);
 
     } finally {
-        run()
+        // run()
     }
     // } while (true);
 };
