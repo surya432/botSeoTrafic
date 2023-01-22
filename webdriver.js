@@ -409,7 +409,7 @@ const run = async () => {
         console.log(error);
 
     } finally {
-        // run()
+        run()
     }
     // } while (true);
 };
