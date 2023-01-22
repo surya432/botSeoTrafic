@@ -1,6 +1,7 @@
 const chromeWebDriver = require("selenium-webdriver/chrome"),
     proxy = require('selenium-webdriver/proxy'),
-    firefox = require("selenium-webdriver/firefox");
+    firefox = require("selenium-webdriver/firefox"),
+    edgeDriver = require("selenium-webdriver/edge");
 const { By, until, Capabilities, Builder, Key, Browser, Actions } = require("selenium-webdriver");
 const chromedriverPath = require("chromedriver").path
 function getRndInteger(min, max) {
@@ -44,7 +45,6 @@ class DriveOtomatis {
             var chromeCapabilities = Capabilities.chrome();
             chromeCapabilities.setPageLoadStrategy("normal");
             chromeCapabilities.setAcceptInsecureCerts(true);
-            chromeCapabilities.setLoggingPrefs()
             if (url) {
                 chromeCapabilities.setProxy(proxy.manual({ http: url }))
             }
@@ -53,11 +53,13 @@ class DriveOtomatis {
             chromeOptions.detachDriver(true);
             // chromeOptions.setChromeBinaryPath('chromedriver.exe');
             chromeOptions.setChromeBinaryPath(chromePaths.chrome);
-            chromeOptions.excludeSwitches(["enable-automation"]);
+            chromeOptions.excludeSwitches(["enable-automation", 'enable-logging']);
             chromeOptions.set("useAutomationExtension", false);
             chromeOptions.addArguments("start-maximized");
             chromeOptions.addArguments('autodetect=false');
             chromeOptions.addArguments('profile-directory=Default');
+            chromeOptions.addArguments('log-level=3');
+            chromeOptions.addArguments('disable-logging');
             // const randomOS = [Platform.MAC, Platform.LINUX, Platform.WINDOWS];
             // chromeOptions.setPlatform(randomOS[Math.floor(Math.random() * randomOS.length)])
             // const deviceName = ['iPhone SE', 'iPhone XR', 'iPhone 12 Pro', 'iPhone X',    'PIXEL 5'];
@@ -85,14 +87,30 @@ class DriveOtomatis {
 
             console.log('chromeOptuions', JSON.stringify(chromeOptions))
             var firefoxOptions = new firefox.Options();
+
             firefoxOptions.addArguments("start-maximized")
             firefoxOptions.addArguments('--headless')
-            firefoxOptions.setBinary("C:\\Program Files\\Mozilla Firefox\\firefox.exe")
+            firefoxOptions.setBinary("C:\\Program Files\\Mozilla Firefox\\firefox.exe");
+            // firefoxOptions.useGeckoDriver(true)
+            var edgeOptions = new edgeDriver.Options();
+            edgeOptions.detachDriver(true)
+            edgeOptions.excludeSwitches(["enable-automation", 'enable-logging']);
+            edgeOptions.set("useAutomationExtension", false);
+            edgeOptions.addArguments("start-maximized");
+
             var driver = new Builder();
-            driver.forBrowser(Browser.CHROME)
+            const listBrowser = [
+                Browser.EDGE,
+                Browser.FIREFOX,
+                Browser.CHROME
+            ];
+            const browserSelected = listBrowser[Math.floor(Math.random() * listBrowser.length)]
+            driver.forBrowser(browserSelected)
             // driver.setChromeService(new chromeWebDriver.ServiceBuilder('chromedriver.exe'))
             driver.setChromeOptions(chromeOptions)
-            driver.setFirefoxOptions(firefoxOptions)
+            driver.setEdgeOptions(edgeOptions)
+            // driver.setFirefoxOptions(firefoxOptions)
+            driver.usingServer("http://127.0.0.1:4444")
             // driver.setFirefoxService(new firefox.ServiceBuilder('geckodriver.exe'))
             console.log("dasda", JSON.stringify(driver))
             this.driver = driver.build();
@@ -404,12 +422,13 @@ const run = async () => {
         } else if (url.type == 'youtube') {
             await Drive.SeoYoutube(url);
         }
-        await Drive.removeDrive()
+        await Drive.removeDrive();
+         run()
     } catch (error) {
         console.log(error);
 
     } finally {
-        run()
+       
     }
     // } while (true);
 };
