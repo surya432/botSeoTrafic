@@ -1,21 +1,6 @@
 {
     "capabilities": [
         {
-            "browserName": "*firefox",
-            "maxInstances": 5,
-            "seleniumProtocol": "Selenium"
-        },
-        {
-            "browserName": "*googlechrome",
-            "maxInstances": 5,
-            "seleniumProtocol": "Selenium"
-        },
-        {
-            "browserName": "firefox",
-            "maxInstances": 5,
-            "seleniumProtocol": "WebDriver"
-        },
-        {
             "browserName": "chrome",
             "maxInstances": 5,
             "seleniumProtocol": "WebDriver"
@@ -25,10 +10,10 @@
         "proxy": "org.openqa.grid.selenium.proxy.DefaultRemoteProxy",
         "maxSession": 5,
         "port": 5555,
-        "host": "http://127.0.0.1",
+        "host": "http://146.190.83.123:4444",
         "register": true,
         "registerCycle": 5000,
-        "hubPort": 4444,
-        "hubHost": "http://127.0.0.1"
+        "hub": "http://146.190.83.123:4444",
+        "max-threads": 12
     }
 }

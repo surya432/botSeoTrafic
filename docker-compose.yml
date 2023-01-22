@@ -36,6 +36,9 @@ services:
   selenium-hub:
     image: selenium/hub
     container_name: selenium-hub
+    environment:
+      - SE_ADMIN=surya432
+      - SE_PASSWORD=Opoaewes@123
     ports:
       - "4442:4442"
       - "4443:4443"

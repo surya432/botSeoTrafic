@@ -62,7 +62,7 @@ class DriveOtomatis {
             chromeOptions.addArguments('profile-directory=Default');
             chromeOptions.addArguments('log-level=3');
             chromeOptions.addArguments('disable-logging');
-            let x = "C:\\temp\\" + Math.random();
+            let x = "C:\\temp\\" + getRndInteger(2000, 13000);
             chromeOptions.addArguments(`user-data-dir=${x}`);
             // const randomOS = [Platform.MAC, Platform.LINUX, Platform.WINDOWS];
             // chromeOptions.setPlatform(randomOS[Math.floor(Math.random() * randomOS.length)])
@@ -104,7 +104,10 @@ class DriveOtomatis {
             const listBrowser = [
                 Browser.EDGE,
                 Browser.FIREFOX,
-                Browser.CHROME
+                Browser.CHROME,
+                Browser.CHROME,
+                Browser.CHROME,
+                Browser.CHROME,
             ];
             const browserSelected = listBrowser[Math.floor(Math.random() * listBrowser.length)]
             driver.forBrowser(browserSelected)
@@ -112,7 +115,7 @@ class DriveOtomatis {
             driver.setChromeOptions(chromeOptions)
             driver.setEdgeOptions(edgeOptions)
             // driver.setFirefoxOptions(firefoxOptions)
-            driver.usingServer("http://127.0.0.1:4444")
+            driver.usingServer("http://127.0.0.1:44441")
             // driver.setFirefoxService(new firefox.ServiceBuilder('geckodriver.exe'))
             console.log("dasda", JSON.stringify(driver))
             this.driver = driver.build();
@@ -404,13 +407,14 @@ const urlList = [
     { keyword: "afanlogamlestari", url: 'https://afanlogamlestari.co.id/', type: "google" },
     { keyword: "tutorialkodingku.com", url: 'https://tutorialkodingku.com', type: "google" },
     { keyword: "Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=4W__cLYipXw', type: "youtube" },
+    { keyword: "surya heho Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=4W__cLYipXw', type: "youtube" },
     { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "google" },
     { keyword: "Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=4qdloLwFTKI', type: "youtube" },
-    { keyword: "tutorialkodingku.com", url: 'https://tutorialkodingku.com', type: "google" },
-    { keyword: "Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=DKb284no7aE', type: "youtube" },
     { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "google" },
-    { keyword: "https://www.instagram.com/digitopupstore/", url: 'digitopupstore.com', type: "backlink" },
-    { keyword: "https://www.facebook.com/Digitopupstore/", url: 'digitopupstore.com', type: "backlink" },
+    { keyword: "Cara Membuat Aplikasi TrackingApps suryaheho", url: 'https://www.youtube.com/watch?v=DKb284no7aE', type: "youtube" },
+    { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "google" },
+    // { keyword: "https://www.instagram.com/digitopupstore/", url: 'digitopupstore.com', type: "backlink" },
+    // { keyword: "https://www.facebook.com/Digitopupstore/", url: 'digitopupstore.com', type: "backlink" },
 ]
 const run = async () => {
     // do {
@@ -420,20 +424,20 @@ const run = async () => {
         const Drive = new DriveOtomatis({ url: '', username: 'surya432', password: 'surya4321' });
         // const Drive = new DriveOtomatis({ url: proxy, username: 'surya123-1', password: 'surya432' });
         await Drive.myIp();
-        // if (url.type == 'google') {
-        //     await Drive.SeoWebsite(url);
-        // } else if (url.type == 'backlink') {
-        //     await Drive.SeoSosmed(url);
-        // } else if (url.type == 'youtube') {
-        //     await Drive.SeoYoutube(url);
-        // }
+        if (url.type == 'google') {
+            await Drive.SeoWebsite(url);
+        } else if (url.type == 'backlink') {
+            await Drive.SeoSosmed(url);
+        } else if (url.type == 'youtube') {
+            await Drive.SeoYoutube(url);
+        }
         await Drive.removeDrive();
 
     } catch (error) {
         console.log(error);
 
     } finally {
-        // run()
+        run()
     }
     // } while (true);
 };
