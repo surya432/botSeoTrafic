@@ -395,7 +395,8 @@ class DriveOtomatis {
             return;
         }
         await this.driver.quit();
-        await rimraf(this.userdir, function () { console.log("done delete folder"); });
+        console.log('s', this.userdir)
+        rimraf.windowsSync(this.userdir);
     }
 }
 const urlList = [
@@ -418,21 +419,21 @@ const run = async () => {
         // const proxy = await getProxyFree();
         const Drive = new DriveOtomatis({ url: '', username: 'surya432', password: 'surya4321' });
         // const Drive = new DriveOtomatis({ url: proxy, username: 'surya123-1', password: 'surya432' });
-        // await Drive.myIp();
-        if (url.type == 'google') {
-            await Drive.SeoWebsite(url);
-        } else if (url.type == 'backlink') {
-            await Drive.SeoSosmed(url);
-        } else if (url.type == 'youtube') {
-            await Drive.SeoYoutube(url);
-        }
+        await Drive.myIp();
+        // if (url.type == 'google') {
+        //     await Drive.SeoWebsite(url);
+        // } else if (url.type == 'backlink') {
+        //     await Drive.SeoSosmed(url);
+        // } else if (url.type == 'youtube') {
+        //     await Drive.SeoYoutube(url);
+        // }
         await Drive.removeDrive();
 
     } catch (error) {
         console.log(error);
 
     } finally {
-        run()
+        // run()
     }
     // } while (true);
 };
