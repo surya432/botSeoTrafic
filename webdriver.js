@@ -3,6 +3,8 @@ const chromeWebDriver = require("selenium-webdriver/chrome"),
     firefox = require("selenium-webdriver/firefox"),
     edgeDriver = require("selenium-webdriver/edge");
 const { By, until, Capabilities, Builder, Key, Browser, Actions } = require("selenium-webdriver");
+var rimraf = require("rimraf");
+
 const chromedriverPath = require("chromedriver").path
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -60,6 +62,8 @@ class DriveOtomatis {
             chromeOptions.addArguments('profile-directory=Default');
             chromeOptions.addArguments('log-level=3');
             chromeOptions.addArguments('disable-logging');
+            let x = "C:\\temp\\" + Math.random();
+            chromeOptions.addArguments(`user-data-dir=${x}`);
             // const randomOS = [Platform.MAC, Platform.LINUX, Platform.WINDOWS];
             // chromeOptions.setPlatform(randomOS[Math.floor(Math.random() * randomOS.length)])
             // const deviceName = ['iPhone SE', 'iPhone XR', 'iPhone 12 Pro', 'iPhone X',    'PIXEL 5'];
@@ -87,9 +91,7 @@ class DriveOtomatis {
 
             console.log('chromeOptuions', JSON.stringify(chromeOptions))
             var firefoxOptions = new firefox.Options();
-
             firefoxOptions.addArguments("start-maximized")
-            firefoxOptions.addArguments('--headless')
             firefoxOptions.setBinary("C:\\Program Files\\Mozilla Firefox\\firefox.exe");
             // firefoxOptions.useGeckoDriver(true)
             var edgeOptions = new edgeDriver.Options();
@@ -115,7 +117,8 @@ class DriveOtomatis {
             console.log("dasda", JSON.stringify(driver))
             this.driver = driver.build();
             this.Qualityvideo144 = false;
-            this.watchingTime = 0
+            this.watchingTime = 0.
+            this.userdir = x
         } catch (error) {
             console.log("constructor", error);
         }
@@ -392,6 +395,7 @@ class DriveOtomatis {
             return;
         }
         await this.driver.quit();
+        await rimraf(this.userdir, function () { console.log("done delete folder"); });
     }
 }
 const urlList = [
@@ -423,12 +427,12 @@ const run = async () => {
             await Drive.SeoYoutube(url);
         }
         await Drive.removeDrive();
-         run()
+
     } catch (error) {
         console.log(error);
 
     } finally {
-       
+        run()
     }
     // } while (true);
 };
