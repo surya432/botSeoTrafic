@@ -106,6 +106,49 @@ class DriveOtomatis {
         await this.driver.sleep(getRndInteger(3000, 5000));
 
     }
+    async SeoSosmed({ url, keyword }) {
+        try {
+            if (this.driver == null) {
+                return;
+            };
+            await this.driver.get(keyword);
+            await this.driver.sleep(getRndInteger(3000, 5000));
+            const originalWindow = await this.driver.getWindowHandle();
+
+            var das = await this.driver.findElements(By.xpath(`//a[contains(@href,'${url}')]`));
+            if (das.length == 0) {
+                console.log("link not found")
+                return;
+            }
+            console.log("link found")
+            await this.driver.findElement(By.xpath(`//a[contains(@href,'${url}')]`)).click();
+            await this.driver.sleep(getRndInteger(3000, 5000));
+            var tabs = await this.driver.getAllWindowHandles();
+            var tabtujuan = ""
+            if (tabs.length == 1) {
+                return;
+            } else {
+                tabs.forEach(async handle => {
+                    if (handle !== originalWindow) {
+                        await this.driver.switchTo().window(handle);
+                        const getCurrentUrl = await this.driver.getCurrentUrl();;
+                        console.log('urlSekarang', getCurrentUrl)
+                        if (getCurrentUrl.includes(url)) {
+                            tabtujuan = handle;
+                        } else {
+                            await this.driver.close();
+                        }
+                    }
+                });
+            }
+            if (tabtujuan != "") return;
+            await this.driver.switchTo().window(tabtujuan);
+            await this.driver.sleep(getRndInteger(13000, 60000));
+        } catch (error) {
+            console.log('SeoSosmed err', error)
+            return
+        }
+    }
     async SeoWebsite({ url, keyword }) {
         try {
             if (this.driver == null) {
@@ -198,7 +241,6 @@ class DriveOtomatis {
                 return;
             };
             const videoId = await this.youtube_parser(url);
-            console.log()
             await this.driver.get('https://youtube.com/');
             await this.driver.sleep(getRndInteger(3000, 5000));
             if (keyword == null) return;
@@ -330,15 +372,17 @@ class DriveOtomatis {
     }
 }
 const urlList = [
-    { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "website" },
-    { keyword: "afanlogamlestari", url: 'https://afanlogamlestari.co.id/', type: "website" },
-    { keyword: "tutorialkodingku.com", url: 'https://tutorialkodingku.com', type: "website" },
+    { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "google" },
+    { keyword: "afanlogamlestari", url: 'https://afanlogamlestari.co.id/', type: "google" },
+    { keyword: "tutorialkodingku.com", url: 'https://tutorialkodingku.com', type: "google" },
     { keyword: "Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=4W__cLYipXw', type: "youtube" },
-    { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "website" },
+    { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "google" },
     { keyword: "Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=4qdloLwFTKI', type: "youtube" },
-    { keyword: "tutorialkodingku.com", url: 'https://tutorialkodingku.com', type: "website" },
+    { keyword: "tutorialkodingku.com", url: 'https://tutorialkodingku.com', type: "google" },
     { keyword: "Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=DKb284no7aE', type: "youtube" },
-    { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "website" },
+    { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "google" },
+    { keyword: "https://www.instagram.com/digitopupstore/", url: 'digitopupstore.com', type: "backlink" },
+    { keyword: "https://www.facebook.com/Digitopupstore/", url: 'digitopupstore.com', type: "backlink" },
 ]
 const run = async () => {
     // do {
@@ -348,9 +392,11 @@ const run = async () => {
         const Drive = new DriveOtomatis({ url: '', username: 'surya432', password: 'surya4321' });
         // const Drive = new DriveOtomatis({ url: proxy, username: 'surya123-1', password: 'surya432' });
         // await Drive.myIp();
-        if (url.type != 'youtube') {
+        if (url.type == 'google') {
             await Drive.SeoWebsite(url);
-        } else {
+        } else if (url.type == 'backlink') {
+            await Drive.SeoSosmed(url);
+        } else if (url.type == 'youtube') {
             await Drive.SeoYoutube(url);
         }
         await Drive.removeDrive()
