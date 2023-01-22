@@ -2,6 +2,7 @@
 
 1. Install Node JS
 2. npm install
-2. Run pm2 webdrive.js -i max --watch
+3. Run java -jar selenium-server-4.7.2.jar standalone
+4. Run pm2 start webdrive.js -i max --watch
 
 https://*.googlevideo.com;https://*.google.com;https://*.google.co.id;http://*.gvt1.com;https://*.gvt1.com;
