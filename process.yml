@@ -1,8 +1,25 @@
 apps:
   - name : 'HTTP-API'
     script: 'app.js'
-    instances: 'max'
+    instances: 1
     max_memory_restart: '260M'
     watch : true,
     ignore_watch : ['node_modules']
-   
+  - name : 'HTTP-API2'
+    script: 'app.js'
+    instances: 1
+    max_memory_restart: '260M'
+    watch : true,
+    ignore_watch : ['node_modules']
+  - name : 'HTTP-API3'
+    script: 'app.js'
+    instances: 1
+    max_memory_restart: '260M'
+    watch : true,
+    ignore_watch : ['node_modules']
+  - name : 'HTTP-API4'
+    script: 'app.js'
+    instances: 1
+    max_memory_restart: '260M'
+    watch : true,
+    ignore_watch : ['node_modules']

@@ -254,7 +254,6 @@ class DriveOtomatis {
             }
             await this.driver.sleep(getRndInteger(3000, 9000));
             let scroll = 0;
-            await this.driver.executeScript(`window.scrollTo(0,5000);`);
             const randomScrolldown = getRndInteger(2000, 5000);
             for (let index = 0; scroll <= randomScrolldown; index++) {
                 scroll = scroll + getRndInteger(100, 500);
@@ -262,6 +261,7 @@ class DriveOtomatis {
                 await this.driver.executeScript(`window.scrollTo(0,${scroll});`);
                 await this.driver.sleep(getRndInteger(2000, 5000));
             }
+            await this.driver.sleep(getRndInteger(10000, 30000));
             const randomScroll = getRndInteger(100, 300)
             for (let index = 0; scroll >= randomScroll; index++) {
                 scroll = scroll - getRndInteger(100, 300);
@@ -269,7 +269,7 @@ class DriveOtomatis {
                 await this.driver.executeScript(`window.scrollTo(0,${scroll});`);
                 await this.driver.sleep(getRndInteger(2000, 5000));
             }
-            await this.driver.sleep(getRndInteger(20000, 60000));
+            await this.driver.sleep(getRndInteger(20000, 40000));
         } catch (error) {
 
             console.log(error);
@@ -340,9 +340,10 @@ class DriveOtomatis {
                     By.xpath("//div[contains(@class,'ytp-ad-player-overlay')]")
                 );
                 if (ads.length == 0) {
+                    var waiting = getRndInteger(2000, 5000)
+                    await this.driver.sleep(waiting);
                     await this.changeQuality();
-                    this.watchingTime = this.watchingTime + 1000;
-                    await this.driver.sleep(1000);
+                    this.watchingTime = this.watchingTime + waiting;
                 }
                 console.log('watchingTime ' + this.watchingTime + " dari " + watchingTimeLimit)
                 console.log('watching ' + this.watchingTime >= watchingTimeLimit)
@@ -419,7 +420,7 @@ class DriveOtomatis {
         }
         await this.driver.quit();
         console.log('s', this.userdir)
-        rimraf.windowsSync(this.userdir);
+        // rimraf.windowsSync(this.userdir);
     }
 }
 // const urlList = [
