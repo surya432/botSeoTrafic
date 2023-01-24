@@ -1,0 +1,8 @@
+apps:
+  - name : 'HTTP-API'
+    script: 'app.js'
+    instances: 'max'
+    max_memory_restart: '260M'
+    watch : true,
+    ignore_watch : ['node_modules']
+   

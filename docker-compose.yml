@@ -1,15 +1,15 @@
 # To execute this docker-compose yml file use docker-compose -f docker-compose-v3.yml up
 # Add the -d flag at the end for detached execution
 # To stop the execution, hit Ctrl+C, and then docker-compose -f docker-compose-v3.yml down
-version: "6"
+version: "3"
 services:
   chrome:
     image: selenium/node-chrome
     shm_size: 2gb
     depends_on:
-      - selenium-hub
+      - seleniumhub
     environment:
-      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_HOST=seleniumhub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
       - SE_NODE_MAX_SESSIONS=5
@@ -17,9 +17,9 @@ services:
     image: selenium/node-edge
     shm_size: 2gb
     depends_on:
-      - selenium-hub
+      - seleniumhub
     environment:
-      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_HOST=seleniumhub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
       - SE_NODE_MAX_SESSIONS=5
@@ -27,15 +27,31 @@ services:
     image: selenium/node-firefox
     shm_size: 2gb
     depends_on:
-      - selenium-hub
+      - seleniumhub
     environment:
-      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_HOST=seleniumhub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
       - SE_NODE_MAX_SESSIONS=5
-  selenium-hub:
+  webdriver:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: webdriver
+    # command: 
+    #   - npm run webdriver.js
+    depends_on:
+      - seleniumhub
+    # volumes:
+    #   - .:/app/
+    #   - /app/node_modules
+    environment:
+      - SELENIUM_HUB_HOST=http://10.10.0.21
+      - SELENIUM_HUB_PORT=44441
+      - PRODUCTION=true
+  seleniumhub:
     image: selenium/hub
-    container_name: selenium-hub
+    container_name: seleniumhub
     environment:
       - SE_ADMIN=surya432
       - SE_PASSWORD=Opoaewes@123

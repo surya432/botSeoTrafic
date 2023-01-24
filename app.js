@@ -54,16 +54,16 @@ class DriveOtomatis {
             chromeOptions.merge(chromeCapabilities)
             chromeOptions.detachDriver(true);
             // chromeOptions.setChromeBinaryPath('chromedriver.exe');
-            chromeOptions.setChromeBinaryPath(chromePaths.chrome);
+            // chromeOptions.setChromeBinaryPath(chromePaths.chrome);
             chromeOptions.excludeSwitches(["enable-automation", 'enable-logging']);
             chromeOptions.set("useAutomationExtension", false);
             chromeOptions.addArguments("start-maximized");
             chromeOptions.addArguments('autodetect=false');
-            chromeOptions.addArguments('profile-directory=Default');
             chromeOptions.addArguments('log-level=3');
             chromeOptions.addArguments('disable-logging');
+            // chromeOptions.addArguments('profile-directory=Default');
             let x = "C:\\temp\\" + getRndInteger(2000, 13000);
-            chromeOptions.addArguments(`user-data-dir=${x}`);
+            // chromeOptions.addArguments(`user-data-dir=${x}`);
             // const randomOS = [Platform.MAC, Platform.LINUX, Platform.WINDOWS];
             // chromeOptions.setPlatform(randomOS[Math.floor(Math.random() * randomOS.length)])
             // const deviceName = ['iPhone SE', 'iPhone XR', 'iPhone 12 Pro', 'iPhone X',    'PIXEL 5'];
@@ -92,7 +92,7 @@ class DriveOtomatis {
             console.log('chromeOptuions', JSON.stringify(chromeOptions))
             var firefoxOptions = new firefox.Options();
             firefoxOptions.addArguments("start-maximized")
-            firefoxOptions.setBinary("C:\\Program Files\\Mozilla Firefox\\firefox.exe");
+            // firefoxOptions.setBinary("C:\\Program Files\\Mozilla Firefox\\firefox.exe");
             // firefoxOptions.useGeckoDriver(true)
             var edgeOptions = new edgeDriver.Options();
             edgeOptions.detachDriver(true)
@@ -115,7 +115,9 @@ class DriveOtomatis {
             driver.setChromeOptions(chromeOptions)
             driver.setEdgeOptions(edgeOptions)
             // driver.setFirefoxOptions(firefoxOptions)
-            driver.usingServer("http://127.0.0.1:44441")
+            var urlServer = `${process.env.SELENIUM_HUB_HOST}:${process.env.SELENIUM_HUB_PORT}`;
+            console.log('SELENIUM_HUB', urlServer)
+            driver.usingServer(`${urlServer}`)
             // driver.setFirefoxService(new firefox.ServiceBuilder('geckodriver.exe'))
             console.log("dasda", JSON.stringify(driver))
             this.driver = driver.build();
@@ -134,7 +136,6 @@ class DriveOtomatis {
         await this.driver.sleep(getRndInteger(3000, 5000));
         await this.driver.get('https://whoer.net/');
         await this.driver.sleep(getRndInteger(3000, 5000));
-
     }
     async SeoSosmed({ url, keyword }) {
         try {
@@ -209,22 +210,36 @@ class DriveOtomatis {
             }
             await this.driver.sleep(getRndInteger(1000, 3000));
             let dataAds = await this.driver.findElements(
-                By.xpath("/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input")
+                By.name("q")
             );
             if (!dataAds) {
-
                 return;
             }
             const urlVideo = url;
-            await this.driver.findElement(By.xpath("/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input")).sendKeys(keyword, Key.ENTER);
+            await this.driver.findElement(By.name("q")).sendKeys(keyword, Key.ENTER);
             this.driver.actions().move({ x: 200, y: 1500, duration: 1000 })
             await this.driver.sleep(getRndInteger(2000, 3000));
-
             let getSearchLink = await this.driver.findElements(
                 By.xpath(`//a[contains(@href,'${urlVideo}')]`)
             );
             if (getSearchLink.length == 0) {
-                await this.driver.get(url);
+                // await this.driver.get(url);
+                var searching = true, pagesearch = 1;
+                do {
+                    await this.driver.executeScript(`window.scrollTo(0,5000);`);
+                    await this.driver.sleep(getRndInteger(1000, 2000));
+                    await this.driver.executeScript(`window.scrollTo(0,-5000);`);
+                    await this.driver.findElement(By.xpath(`//a[contains(@id,'pnnext')]`)).click();
+                    let getSearchLink1 = await this.driver.findElements(
+                        By.xpath(`//a[contains(@href,'${urlVideo}')]`)
+                    );
+                    if (getSearchLink1.length > 0) {
+                        searching = false
+                        await this.driver.findElement(By.xpath(`//a[contains(@href,'${urlVideo}')]`)).click();
+                    } else {
+                        pagesearch = pagesearch + 1
+                    }
+                } while (searching || pagesearch <= 10);
             } else {
                 await this.driver.executeScript(`window.scrollTo(0,5000);`);
                 await this.driver.sleep(getRndInteger(2000, 3000));
@@ -254,11 +269,11 @@ class DriveOtomatis {
                 await this.driver.executeScript(`window.scrollTo(0,${scroll});`);
                 await this.driver.sleep(getRndInteger(2000, 5000));
             }
-            await this.driver.sleep(getRndInteger(13000, 60000));
+            await this.driver.sleep(getRndInteger(20000, 60000));
         } catch (error) {
 
             console.log(error);
-        }
+        } 
     }
     async youtube_parser(url) {
         var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
@@ -402,28 +417,31 @@ class DriveOtomatis {
         rimraf.windowsSync(this.userdir);
     }
 }
-const urlList = [
-    { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "google" },
-    { keyword: "afanlogamlestari", url: 'https://afanlogamlestari.co.id/', type: "google" },
-    { keyword: "tutorialkodingku.com", url: 'https://tutorialkodingku.com', type: "google" },
-    { keyword: "Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=4W__cLYipXw', type: "youtube" },
-    { keyword: "surya heho Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=4W__cLYipXw', type: "youtube" },
-    { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "google" },
-    { keyword: "Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=4qdloLwFTKI', type: "youtube" },
-    { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "google" },
-    { keyword: "Cara Membuat Aplikasi TrackingApps suryaheho", url: 'https://www.youtube.com/watch?v=DKb284no7aE', type: "youtube" },
-    { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "google" },
-    // { keyword: "https://www.instagram.com/digitopupstore/", url: 'digitopupstore.com', type: "backlink" },
-    // { keyword: "https://www.facebook.com/Digitopupstore/", url: 'digitopupstore.com', type: "backlink" },
-]
+// const urlList = [
+//     { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "google" },
+//     { keyword: "afanlogamlestari", url: 'https://afanlogamlestari.co.id/', type: "google" },
+//     { keyword: "tutorialkodingku.com", url: 'https://tutorialkodingku.com', type: "google" },
+//     { keyword: "Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=4W__cLYipXw', type: "youtube" },
+//     { keyword: "surya heho Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=4W__cLYipXw', type: "youtube" },
+//     { keyword: "digitop up", url: 'https://digitopupstore.com/', type: "google" },
+//     { keyword: "Cara Membuat Aplikasi TrackingApps", url: 'https://www.youtube.com/watch?v=4qdloLwFTKI', type: "youtube" },
+//     { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "google" },
+//     { keyword: "Cara Membuat Aplikasi TrackingApps suryaheho", url: 'https://www.youtube.com/watch?v=DKb284no7aE', type: "youtube" },
+//     { keyword: "digitop up", url: 'https://digitopupstore.com/', type: "google" },
+//     // { keyword: "https://www.instagram.com/digitopupstore/", url: 'digitopupstore.com', type: "backlink" },
+//     // { keyword: "https://www.facebook.com/Digitopupstore/", url: 'digitopupstore.com', type: "backlink" },
+// ]
 const run = async () => {
     // do {
-    const url = urlList[Math.floor(Math.random() * urlList.length)]
     try {
+        const resp = await axios.get(`https://api.npoint.io/670f5527b2d722e4d2bf`);
+        var urlList = resp.data;
+        const url = urlList[Math.floor(Math.random() * urlList.length)]
         // const proxy = await getProxyFree();
+        console.log('url', JSON.stringify(url))
         const Drive = new DriveOtomatis({ url: '', username: 'surya432', password: 'surya4321' });
         // const Drive = new DriveOtomatis({ url: proxy, username: 'surya123-1', password: 'surya432' });
-        await Drive.myIp();
+        // await Drive.myIp();
         if (url.type == 'google') {
             await Drive.SeoWebsite(url);
         } else if (url.type == 'backlink') {
@@ -435,9 +453,10 @@ const run = async () => {
 
     } catch (error) {
         console.log(error);
-
     } finally {
-        run()
+        if (process.env.PRODUCTION) {
+            run()
+        }
     }
     // } while (true);
 };
