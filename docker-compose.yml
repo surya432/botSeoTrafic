@@ -3,59 +3,57 @@
 # To stop the execution, hit Ctrl+C, and then docker-compose -f docker-compose-v3.yml down
 version: "3"
 services:
-  chrome:
-    image: selenium/node-chrome
-    shm_size: 2gb
-    depends_on:
-      - seleniumhub
-    environment:
-      - SE_EVENT_BUS_HOST=seleniumhub
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-      - SE_NODE_MAX_SESSIONS=10
-  edge:
-    image: selenium/node-edge
-    shm_size: 2gb
-    depends_on:
-      - seleniumhub
-    environment:
-      - SE_EVENT_BUS_HOST=seleniumhub
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-      - SE_NODE_MAX_SESSIONS=10
-  firefox:
-    image: selenium/node-firefox
-    shm_size: 2gb
-    depends_on:
-      - seleniumhub
-    environment:
-      - SE_EVENT_BUS_HOST=seleniumhub
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-      - SE_NODE_MAX_SESSIONS=10
   webdriver:
     build: 
       context: .
       dockerfile: Dockerfile
     container_name: webdriver
-    # command: 
-    #   - npm run webdriver.js
     depends_on:
-      - seleniumhub
-    # volumes:
-    #   - .:/app/
-    #   - /app/node_modules
+      - selenium-hub
     environment:
-      - SELENIUM_HUB_HOST=http://10.10.0.21
-      - SELENIUM_HUB_PORT=44441
+      - SELENIUM_HUB_HOST=${SELENIUM_HUB}
+      - SELENIUM_HUB_PORT=${SELENIUM_HUB_PORT}
       - PRODUCTION=true
-  seleniumhub:
-    image: selenium/hub
-    container_name: seleniumhub
+
+  chrome:
+    image: selenium/node-chrome
+    shm_size: 1gb
+    depends_on:
+      - selenium-hub
     environment:
-      - SE_ADMIN=surya432
-      - SE_PASSWORD=Opoaewes@123
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=10
+
+  edge:
+    image: selenium/node-edge
+    shm_size: 1gb
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=10
+  
+  firefox:
+    image: selenium/node-firefox
+    shm_size: 1gb
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=10
+  
+  selenium-hub:
+    image: selenium/hub
+    container_name: selenium-hub
     ports:
       - "4442:4442"
       - "4443:4443"
-      - "44441:4444"
+      - "${SELENIUM_HUB_PORT}:4444"
+    volumes:
+      - ./config.toml:/opt/selenium/config.toml
