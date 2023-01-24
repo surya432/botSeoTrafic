@@ -328,6 +328,11 @@ class DriveOtomatis {
             }
             await this.driver.findElement(By.xpath(`//a[contains(@href,'${videoId}')]`)).click()
             await this.driver.sleep(getRndInteger(4000, 5000));
+            const getCurrentUrl = await this.driver.getCurrentUrl();
+            console.log("getCurrentUrl", getCurrentUrl)
+            if (!getCurrentUrl.includes(videoId)) {
+                return;
+            }
             this.watchingTime = 0
             do {
                 await this.checkAdsYoutube();

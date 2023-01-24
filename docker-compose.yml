@@ -12,7 +12,7 @@ services:
       - SE_EVENT_BUS_HOST=seleniumhub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-      - SE_NODE_MAX_SESSIONS=5
+      - SE_NODE_MAX_SESSIONS=10
   edge:
     image: selenium/node-edge
     shm_size: 2gb
@@ -22,7 +22,7 @@ services:
       - SE_EVENT_BUS_HOST=seleniumhub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-      - SE_NODE_MAX_SESSIONS=5
+      - SE_NODE_MAX_SESSIONS=10
   firefox:
     image: selenium/node-firefox
     shm_size: 2gb
@@ -32,7 +32,7 @@ services:
       - SE_EVENT_BUS_HOST=seleniumhub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-      - SE_NODE_MAX_SESSIONS=5
+      - SE_NODE_MAX_SESSIONS=10
   webdriver:
     build: 
       context: .
