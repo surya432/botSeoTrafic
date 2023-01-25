@@ -25,6 +25,7 @@ services:
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
       - SE_NODE_MAX_SESSIONS=10
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
 
   edge:
     image: selenium/node-edge
@@ -36,7 +37,8 @@ services:
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
       - SE_NODE_MAX_SESSIONS=10
-  
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      
   firefox:
     image: selenium/node-firefox
     shm_size: 1gb
@@ -47,10 +49,14 @@ services:
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
       - SE_NODE_MAX_SESSIONS=10
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
   
   selenium-hub:
     image: selenium/hub
     container_name: selenium-hub
+    environtment:
+      - SE_SESSION_REQUEST_TIMEOUT=1200
+      - SE_SESSION_RETRY_INTERVAL=10
     ports:
       - "4442:4442"
       - "4443:4443"
