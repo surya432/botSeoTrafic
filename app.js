@@ -102,8 +102,16 @@ class DriveOtomatis {
 
             var driver = new Builder();
             const listBrowser = [
-                Browser.EDGE,
+                Browser.CHROME,
+                Browser.CHROME,
+                Browser.CHROME,
                 Browser.FIREFOX,
+                Browser.CHROME,
+                Browser.CHROME,
+                Browser.CHROME,
+                Browser.EDGE,
+                Browser.CHROME,
+                Browser.CHROME,
                 Browser.CHROME,
             ];
             const browserSelected = listBrowser[Math.floor(Math.random() * listBrowser.length)]
