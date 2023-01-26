@@ -250,7 +250,7 @@ class DriveOtomatis {
                     await this.driver.executeScript(`window.scrollTo(0,5000);`);
                     await this.driver.sleep(getRndInteger(1000, 2000));
                     // await this.driver.executeScript(`window.scrollTo(0,-5000);`);
-                    // await this.driver.findElement(By.xpath(`//a[contains(@id,'pnnext')]`)).click();
+                    var sd = await this.driver.findElement(By.xpath(`//a[contains(@id,'pnnext')]`))
                     let getSearchLink1 = await this.driver.findElements(
                         By.xpath(`//a[contains(@href,'${urlVideo}')]`)
                     );
@@ -258,7 +258,11 @@ class DriveOtomatis {
                         searching = false
                         await this.driver.findElement(By.xpath(`//a[contains(@href,'${urlVideo}')]`)).click();
                     } else if (scrollGOogle == 50000 && index > 9) {
-                        await this.driver.get(url);
+                        if (sd) {
+                            sd.click();
+                        }else{
+                            await this.driver.get(url);
+                        }
                     } else {
                         pagesearch = pagesearch + 1
                     }
