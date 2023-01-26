@@ -247,10 +247,10 @@ class DriveOtomatis {
                 var searching = true, pagesearch = 1;
                 var scrollGOogle = 0
                 for (let index = 0; pagesearch <= 15; index++) {
-                    await this.driver.executeScript(`window.scrollTo(0,5000);`);
+                    scrollGOogle = scrollGOogle + 5000
+                    await this.driver.executeScript(`window.scrollTo(0,${scrollGOogle});`);
                     await this.driver.sleep(getRndInteger(1000, 2000));
                     // await this.driver.executeScript(`window.scrollTo(0,-5000);`);
-                    var sd = await this.driver.findElement(By.xpath(`//a[contains(@id,'pnnext')]`))
                     let getSearchLink1 = await this.driver.findElements(
                         By.xpath(`//a[contains(@href,'${urlVideo}')]`)
                     );
@@ -258,15 +258,16 @@ class DriveOtomatis {
                         searching = false
                         await this.driver.findElement(By.xpath(`//a[contains(@href,'${urlVideo}')]`)).click();
                     } else if (scrollGOogle == 50000 && index > 9) {
-                        if (sd) {
+                        var sd2 = await this.driver.findElements(By.xpath(`//a[contains(@href,'search?q=')]`))
+                        if (sd2.length > 0) {
+                            var sd = await this.driver.findElement(By.xpath(`//a[contains(@href,'search?q=')]`))
                             sd.click();
-                        }else{
+                        } else {
                             await this.driver.get(url);
                         }
                     } else {
                         pagesearch = pagesearch + 1
                     }
-                    scrollGOogle = scrollGOogle + 5000
                 }
             } else {
                 await this.driver.executeScript(`window.scrollTo(0,5000);`);
