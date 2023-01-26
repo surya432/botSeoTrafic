@@ -16,6 +16,7 @@ const readline = require('readline');
 const moment = require("moment/moment");
 const { default: axios } = require("axios");
 const { Platform } = require("selenium-webdriver/lib/capabilities");
+const { platform } = require("process");
 let watchingTimeLimit = 5 * 60 * 1000;
 
 function convert(file) {
@@ -43,7 +44,11 @@ function convert(file) {
 class DriveOtomatis {
     constructor({ url, username, password }) {
         try {
-            console.log('chormepath', chromePaths.chrome)
+            var temp = "/tmp/chrome/"
+            if (platform.includes("win")) {
+                temp = "C:\\temp\\"
+            }
+            console.log('chormepath', { path: chromePaths.chrome, temp })
             var chromeCapabilities = Capabilities.chrome();
             chromeCapabilities.setPageLoadStrategy("normal");
             chromeCapabilities.setAcceptInsecureCerts(true);
@@ -61,7 +66,7 @@ class DriveOtomatis {
             chromeOptions.addArguments('autodetect=false');
             chromeOptions.addArguments('log-level=3');
             chromeOptions.addArguments('disable-logging');
-            let x = "/tmp/chrome/" + getRndInteger(2000, 13000);
+            let x = temp + getRndInteger(2000, 13000);
             chromeOptions.addArguments(`profile-directory=${x}`);
             // chromeOptions.addArguments(`user-data-dir=${x}`);
             // const randomOS = [Platform.MAC, Platform.LINUX, Platform.WINDOWS];
