@@ -246,7 +246,7 @@ class DriveOtomatis {
             );
             if (getSearchLink.length == 0) {
                 var searching = true, pagesearch = 1;
-                var scrollGOogle = 0
+                var scrollGOogle = 0, isFound = false;
                 for (let index = 0; pagesearch <= 15; index++) {
                     scrollGOogle = scrollGOogle + 5000
                     await this.driver.executeScript(`window.scrollTo(0,${scrollGOogle});`);
@@ -259,19 +259,23 @@ class DriveOtomatis {
                         searching = false
                         await this.driver.findElement(By.xpath(`//a[contains(@href,'${urlVideo}')]`)).click();
                     } else if (scrollGOogle == 50000 && index > 9) {
-                            await this.driver.get(url);
+                        await this.driver.get(url);
                     } else {
                         var sd2 = await this.driver.findElements(By.xpath(`//a[contains(@href,'search?q=')]`))
                         var sd3 = await this.driver.findElements(By.xpath(`//a[contains(@id,'pnnext')]`))
                         if (sd2.length > 0) {
                             var sd = await this.driver.findElement(By.xpath(`//a[contains(@href,'search?q=')]`))
                             sd.click();
-                        } else if(sd3.length>0) {
+                        } else if (sd3.length > 0) {
                             sd.click();
                         }
                     }
                     await this.driver.sleep(getRndInteger(1000, 2000));
                     pagesearch = pagesearch + 1
+                }
+                if (!isFound) {
+                    console.log('search notfound')
+                    return;
                 }
             } else {
                 await this.driver.executeScript(`window.scrollTo(0,5000);`);
