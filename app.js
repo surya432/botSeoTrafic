@@ -260,6 +260,7 @@ class DriveOtomatis {
                         await this.driver.findElement(By.xpath(`//a[contains(@href,'${urlVideo}')]`)).click();
                     } else if (scrollGOogle == 50000 && index > 9) {
                         await this.driver.get(url);
+                        break;
                     } else {
                         var sd2 = await this.driver.findElements(By.xpath(`//a[contains(@href,'search?q=')]`))
                         var sd3 = await this.driver.findElements(By.xpath(`//a[contains(@id,'pnnext')]`))
