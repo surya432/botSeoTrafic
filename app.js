@@ -59,6 +59,7 @@ class DriveOtomatis {
             if (platform.includes("win")) {
                 temp = "C:\\temp\\" + getRndInteger(2000, 13000);
             }
+            const prs = getRndInteger(2000, 13000);
             console.log('chormepath', { path: chromePaths.chrome, temp })
             var chromeCapabilities = Capabilities.chrome();
             chromeCapabilities.setPageLoadStrategy("normal");
@@ -78,7 +79,7 @@ class DriveOtomatis {
             chromeOptions.addArguments('log-level=3');
             chromeOptions.addArguments('disable-logging');
             let x = temp
-            chromeOptions.addArguments(`profile-directory=${x}`);
+            chromeOptions.addArguments(`profile-directory=${prs}`);
             chromeOptions.addArguments(`user-data-dir=${x}`);
             // const randomOS = [Platform.MAC, Platform.LINUX, Platform.WINDOWS];
             // chromeOptions.setPlatform(randomOS[Math.floor(Math.random() * randomOS.length)])
