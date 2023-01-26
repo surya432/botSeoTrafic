@@ -15,9 +15,7 @@ const fs = require('fs');
 const readline = require('readline');
 const moment = require("moment/moment");
 const { default: axios } = require("axios");
-const { Platform } = require("selenium-webdriver/lib/capabilities");
 const { platform } = require("process");
-const { rimrafSync } = require("rimraf/dist/cjs/src");
 let watchingTimeLimit = 5 * 60 * 1000;
 
 function convert(file) {
