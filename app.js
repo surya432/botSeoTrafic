@@ -61,7 +61,7 @@ class DriveOtomatis {
             chromeOptions.addArguments('autodetect=false');
             chromeOptions.addArguments('log-level=3');
             chromeOptions.addArguments('disable-logging');
-            let x = "C:\\temp\\" + getRndInteger(2000, 13000);
+            let x = "/tmp/chrome/" + getRndInteger(2000, 13000);
             chromeOptions.addArguments(`profile-directory=${x}`);
             // chromeOptions.addArguments(`user-data-dir=${x}`);
             // const randomOS = [Platform.MAC, Platform.LINUX, Platform.WINDOWS];

@@ -89,6 +89,9 @@ services:
     restart: always
     image: selenium/node-chrome:4.8.0-20230123
     shm_size: 2gb
+    volumes:
+      - /dev/shm:/dev/shm
+      - /tmp/chrome:/tmp/chrome_profiles
     depends_on:
       - selenium-event-bus
     environment:
