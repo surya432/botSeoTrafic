@@ -230,7 +230,7 @@ class DriveOtomatis {
             if (getSearchLink.length == 0) {
                 // await this.driver.get(url);
                 var searching = true, pagesearch = 1;
-                do {
+                for (let index = 0; index < 10; index++) {
                     await this.driver.executeScript(`window.scrollTo(0,5000);`);
                     await this.driver.sleep(getRndInteger(1000, 2000));
                     await this.driver.executeScript(`window.scrollTo(0,-5000);`);
@@ -244,7 +244,7 @@ class DriveOtomatis {
                     } else {
                         pagesearch = pagesearch + 1
                     }
-                } while (searching || pagesearch <= 10);
+                }
             } else {
                 await this.driver.executeScript(`window.scrollTo(0,5000);`);
                 await this.driver.sleep(getRndInteger(2000, 3000));
@@ -275,10 +275,13 @@ class DriveOtomatis {
                 await this.driver.sleep(getRndInteger(2000, 5000));
             }
             await this.driver.sleep(getRndInteger(20000, 40000));
+
         } catch (error) {
 
             console.log(error);
-        } 
+        } finally {
+            return;
+        }
     }
     async youtube_parser(url) {
         var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
@@ -291,6 +294,9 @@ class DriveOtomatis {
                 return;
             };
             const videoId = await this.youtube_parser(url);
+            if (videoId == false) {
+                return;
+            }
             await this.driver.get('https://youtube.com/');
             await this.driver.sleep(getRndInteger(3000, 5000));
             if (keyword == null) return;
@@ -358,6 +364,8 @@ class DriveOtomatis {
         } catch (error) {
             console.log(error);
             return
+        } finally {
+            return;
         }
 
     }
@@ -471,19 +479,5 @@ const run = async () => {
     }
     // } while (true);
 };
-const getProxyFree = async () => {
-    try {
-        var time = moment()
-        time.utc()
-        const dateUtc = time.format("YYYY-MM-DD")
-        const resp = await axios.get(`https://checkerproxy.net/api/archive/${dateUtc}`);
-        var dataProxy = resp.data;
-        const proxyIndo = dataProxy.filter(item => item.addr_geo_country == "Indonesia" && item.timeout < 10000)
-        console.log(proxyIndo[0])
-        return proxyIndo[0].addr;
-    } catch (error) {
-        return ""
-    }
-}
 // run()
 run();
