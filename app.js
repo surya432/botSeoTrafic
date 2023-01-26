@@ -122,11 +122,11 @@ class DriveOtomatis {
                 // Browser.CHROME,
                 // Browser.CHROME,
                 // Browser.CHROME,
-                // Browser.FIREFOX,
+                Browser.FIREFOX,
                 // Browser.CHROME,
                 // Browser.CHROME,
                 // Browser.CHROME,
-                // Browser.EDGE,
+                Browser.EDGE,
                 // Browser.CHROME,
                 // Browser.CHROME,
                 Browser.CHROME,
@@ -134,8 +134,8 @@ class DriveOtomatis {
             const browserSelected = listBrowser[Math.floor(Math.random() * listBrowser.length)]
             driver.forBrowser(browserSelected)
             // driver.setChromeService(new chromeWebDriver.ServiceBuilder('chromedriver.exe'))
-            // driver.setChromeOptions(chromeOptions)
-            // driver.setEdgeOptions(edgeOptions)
+            driver.setChromeOptions(chromeOptions)
+            driver.setEdgeOptions(edgeOptions)
             // driver.setFirefoxOptions(firefoxOptions)
             var urlServer = `${process.env.SELENIUM_HUB_HOST}:${process.env.SELENIUM_HUB_PORT}`;
             driver.usingServer(`${urlServer}`)
@@ -244,22 +244,25 @@ class DriveOtomatis {
                 By.xpath(`//a[contains(@href,'${urlVideo}')]`)
             );
             if (getSearchLink.length == 0) {
-                // await this.driver.get(url);
                 var searching = true, pagesearch = 1;
-                for (let index = 0; index < 10; index++) {
+                var scrollGOogle = 0
+                for (let index = 0; index <= 15; index++) {
                     await this.driver.executeScript(`window.scrollTo(0,5000);`);
                     await this.driver.sleep(getRndInteger(1000, 2000));
-                    await this.driver.executeScript(`window.scrollTo(0,-5000);`);
-                    await this.driver.findElement(By.xpath(`//a[contains(@id,'pnnext')]`)).click();
+                    // await this.driver.executeScript(`window.scrollTo(0,-5000);`);
+                    // await this.driver.findElement(By.xpath(`//a[contains(@id,'pnnext')]`)).click();
                     let getSearchLink1 = await this.driver.findElements(
                         By.xpath(`//a[contains(@href,'${urlVideo}')]`)
                     );
                     if (getSearchLink1.length > 0) {
                         searching = false
                         await this.driver.findElement(By.xpath(`//a[contains(@href,'${urlVideo}')]`)).click();
+                    } else if (scrollGOogle == 50000 && index > 9) {
+                        await this.driver.get(url);
                     } else {
                         pagesearch = pagesearch + 1
                     }
+                    scrollGOogle = scrollGOogle + 5000
                 }
             } else {
                 await this.driver.executeScript(`window.scrollTo(0,5000);`);
