@@ -10,115 +10,58 @@ services:
     container_name: webdriver
     restart: always
     depends_on:
-      - selenium-event-bus
+      - selenium-hub
     environment:
       - SELENIUM_HUB_HOST=${SELENIUM_HUB}
       - SELENIUM_HUB_PORT=${SELENIUM_HUB_PORT}
       - PRODUCTION=${PRODUCTION}
       - NODE=${NODE}
 
-  selenium-event-bus:
-    image: selenium/event-bus:4.8.0-20230123
-    restart: always
-    container_name: selenium-event-bus
-    ports:
-      - "4442:4442"
-      - "4443:4443"
-      - "5557:5557"
-
-  selenium-sessions:
-    image: selenium/sessions:4.8.0-20230123
-    container_name: selenium-sessions
-    restart: always
-    ports:
-      - "5556:5556"
-    depends_on:
-      - selenium-event-bus
-    environment:
-      - SE_EVENT_BUS_HOST=selenium-event-bus
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-
-  selenium-session-queue:
-    restart: always
-    image: selenium/session-queue:4.8.0-20230123
-    container_name: selenium-session-queue
-    ports:
-      - "5559:5559"
-    environment:
-      - SE_SESSION_REQUEST_TIMEOUT=1200
-      - SE_SESSION_RETRY_INTERVAL=10
-  selenium-distributor:
-    restart: always
-    image: selenium/distributor:4.8.0-20230123
-    container_name: selenium-distributor
-    ports:
-      - "5553:5553"
-    depends_on:
-      - selenium-event-bus
-      - selenium-sessions
-      - selenium-session-queue
-    environment:
-      - SE_EVENT_BUS_HOST=selenium-event-bus
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-      - SE_SESSIONS_MAP_HOST=selenium-sessions
-      - SE_SESSIONS_MAP_PORT=5556
-      - SE_SESSION_QUEUE_HOST=selenium-session-queue
-      - SE_SESSION_QUEUE_PORT=5559
-
-  selenium-router:
-    restart: always
-    image: selenium/router:4.8.0-20230123
-    container_name: selenium-router
-    ports:
-      - "${SELENIUM_HUB_PORT}:4444"
-    depends_on:
-      - selenium-distributor
-      - selenium-sessions
-      - selenium-session-queue
-    environment:
-      - SE_DISTRIBUTOR_HOST=selenium-distributor
-      - SE_DISTRIBUTOR_PORT=5553
-      - SE_SESSIONS_MAP_HOST=selenium-sessions
-      - SE_SESSIONS_MAP_PORT=5556
-      - SE_SESSION_QUEUE_HOST=selenium-session-queue
-      - SE_SESSION_QUEUE_PORT=5559
-    volumes:
-      - ./config.toml:/opt/selenium/config.toml
-
   chrome:
+    image: selenium/node-chrome
+    shm_size: 1gb
     restart: always
-    image: selenium/node-chrome:4.8.0-20230123
-    shm_size: 2gb
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
     volumes:
       - /dev/shm:/dev/shm
       - /tmp/chrome:/tmp/chrome_profiles
-    depends_on:
-      - selenium-event-bus
-    environment:
-      - SE_EVENT_BUS_HOST=selenium-event-bus
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-
   edge:
+    image: selenium/node-edge
+    shm_size: 1gb
     restart: always
-    image: selenium/node-edge:4.8.0-20230123
-    shm_size: 2gb
     depends_on:
-      - selenium-event-bus
+      - selenium-hub
     environment:
-      - SE_EVENT_BUS_HOST=selenium-event-bus
+      - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-
+      
   firefox:
+    image: selenium/node-firefox
+    shm_size: 1gb
     restart: always
-    image: selenium/node-firefox:4.8.0-20230123
-    shm_size: 2gb
     depends_on:
-      - selenium-event-bus
+      - selenium-hub
     environment:
-      - SE_EVENT_BUS_HOST=selenium-event-bus
+      - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+  
+  selenium-hub:
+    image: selenium/hub
+    container_name: selenium-hub
+    restart: always
+    environment:
+      - SE_SESSION_REQUEST_TIMEOUT=1200
+      - SE_SESSION_RETRY_INTERVAL=10
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "${SELENIUM_HUB_PORT}:4444"
+    volumes:
+      - ./config.toml:/opt/selenium/config.toml
