@@ -76,11 +76,12 @@ class DriveOtomatis {
             chromeOptions.set("useAutomationExtension", false);
             chromeOptions.addArguments("start-maximized");
             chromeOptions.addArguments('autodetect=false');
+            chromeOptions.addArguments('lang=id');
             chromeOptions.addArguments('log-level=3');
             chromeOptions.addArguments('disable-logging');
             let x = temp
-            chromeOptions.addArguments(`profile-directory=${prs}`);
-            chromeOptions.addArguments(`user-data-dir=${x}`);
+            // chromeOptions.addArguments(`profile-directory=${prs}`);
+            // chromeOptions.addArguments(`user-data-dir=${x}`);
             // const randomOS = [Platform.MAC, Platform.LINUX, Platform.WINDOWS];
             // chromeOptions.setPlatform(randomOS[Math.floor(Math.random() * randomOS.length)])
             // const deviceName = ['iPhone SE', 'iPhone XR', 'iPhone 12 Pro', 'iPhone X',    'PIXEL 5'];
@@ -136,7 +137,7 @@ class DriveOtomatis {
             // driver.setChromeService(new chromeWebDriver.ServiceBuilder('chromedriver.exe'))
             driver.setChromeOptions(chromeOptions)
             driver.setEdgeOptions(edgeOptions)
-            // driver.setFirefoxOptions(firefoxOptions)
+            driver.setFirefoxOptions(firefoxOptions)
             var urlServer = `${process.env.SELENIUM_HUB_HOST}:${process.env.SELENIUM_HUB_PORT}`;
             driver.usingServer(`${urlServer}`)
             // driver.setFirefoxService(new firefox.ServiceBuilder('geckodriver.exe'))
