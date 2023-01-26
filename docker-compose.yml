@@ -45,7 +45,9 @@ services:
     container_name: selenium-session-queue
     ports:
       - "5559:5559"
-
+    environment:
+      - SE_SESSION_REQUEST_TIMEOUT=1200
+      - SE_SESSION_RETRY_INTERVAL=10
   selenium-distributor:
     restart: always
     image: selenium/distributor:4.8.0-20230123
