@@ -35,3 +35,15 @@ apps:
     max_memory_restart: '260M'
     watch : true,
     ignore_watch : ['node_modules']
+  - name : 'HTTP-API7'
+    script: 'app.js'
+    instances: 1
+    max_memory_restart: '260M'
+    watch : true,
+    ignore_watch : ['node_modules']
+  - name : 'HTTP-API8'
+    script: 'app.js'
+    instances: 'max'
+    max_memory_restart: '260M'
+    watch : true,
+    ignore_watch : ['node_modules']
