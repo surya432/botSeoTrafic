@@ -134,8 +134,8 @@ class DriveOtomatis {
             const browserSelected = listBrowser[Math.floor(Math.random() * listBrowser.length)]
             driver.forBrowser(browserSelected)
             // driver.setChromeService(new chromeWebDriver.ServiceBuilder('chromedriver.exe'))
-            driver.setChromeOptions(chromeOptions)
-            driver.setEdgeOptions(edgeOptions)
+            // driver.setChromeOptions(chromeOptions)
+            // driver.setEdgeOptions(edgeOptions)
             // driver.setFirefoxOptions(firefoxOptions)
             var urlServer = `${process.env.SELENIUM_HUB_HOST}:${process.env.SELENIUM_HUB_PORT}`;
             driver.usingServer(`${urlServer}`)
