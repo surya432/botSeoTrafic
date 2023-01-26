@@ -308,12 +308,10 @@ class DriveOtomatis {
                 await this.driver.sleep(getRndInteger(2000, 5000));
             }
             await this.driver.sleep(getRndInteger(20000, 40000));
-
+            return;
         } catch (error) {
 
             console.log(error);
-        } finally {
-            return;
         }
     }
     async youtube_parser(url) {
@@ -393,14 +391,10 @@ class DriveOtomatis {
                 console.log('watching ' + this.watchingTime >= watchingTimeLimit)
             } while (this.watchingTime <= watchingTimeLimit);
             return;
-            // }
         } catch (error) {
             console.log(error);
             return
-        } finally {
-            return;
         }
-
     }
     async changeQuality() {
         try {
@@ -427,6 +421,7 @@ class DriveOtomatis {
 
             }
             console.log('quality video ', videoQuality.length)
+            return;
         } catch (error) {
             console.log("changeQuality", error)
             return
@@ -455,6 +450,7 @@ class DriveOtomatis {
                     }
                 }
             }
+            return;
         } catch (error) {
             console.log("checkAdsYoutube Err", error);
             return
@@ -499,9 +495,7 @@ const run = async () => {
     } catch (error) {
         console.log(error);
     } finally {
-        if (process.env.PRODUCTION) {
-            run()
-        }
+        run()
     }
     // } while (true);
 };
