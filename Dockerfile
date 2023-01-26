@@ -1,3 +1,5 @@
+ARG NODE
+
 FROM node:16-alpine
 
 WORKDIR /app
@@ -7,5 +9,5 @@ COPY . .
 RUN npm ci
 RUN npm install pm2 -g
 
-CMD ["pm2-runtime", "process.yml"]
+CMD ["pm2", "start", "app.js","-i","$NODE",'--watch']
 

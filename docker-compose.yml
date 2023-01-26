@@ -8,16 +8,19 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: webdriver
+    restart: always
     depends_on:
       - selenium-hub
     environment:
       - SELENIUM_HUB_HOST=${SELENIUM_HUB}
       - SELENIUM_HUB_PORT=${SELENIUM_HUB_PORT}
       - PRODUCTION=${PRODUCTION}
+      - NODE=${NODE}
 
   chrome:
     image: selenium/node-chrome
     shm_size: 1gb
+    restart: always
     depends_on:
       - selenium-hub
     environment:
@@ -30,6 +33,7 @@ services:
   edge:
     image: selenium/node-edge
     shm_size: 1gb
+    restart: always
     depends_on:
       - selenium-hub
     environment:
@@ -42,6 +46,7 @@ services:
   firefox:
     image: selenium/node-firefox
     shm_size: 1gb
+    restart: always
     depends_on:
       - selenium-hub
     environment:
@@ -54,7 +59,8 @@ services:
   selenium-hub:
     image: selenium/hub
     container_name: selenium-hub
-    environtment:
+    restart: always
+    environment:
       - SE_SESSION_REQUEST_TIMEOUT=1200
       - SE_SESSION_RETRY_INTERVAL=10
     ports:
