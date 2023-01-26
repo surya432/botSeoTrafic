@@ -61,8 +61,8 @@ class DriveOtomatis {
             chromeOptions.addArguments('autodetect=false');
             chromeOptions.addArguments('log-level=3');
             chromeOptions.addArguments('disable-logging');
-            // chromeOptions.addArguments('profile-directory=Default');
             let x = "C:\\temp\\" + getRndInteger(2000, 13000);
+            chromeOptions.addArguments(`profile-directory=${x}`);
             // chromeOptions.addArguments(`user-data-dir=${x}`);
             // const randomOS = [Platform.MAC, Platform.LINUX, Platform.WINDOWS];
             // chromeOptions.setPlatform(randomOS[Math.floor(Math.random() * randomOS.length)])
@@ -88,10 +88,10 @@ class DriveOtomatis {
             //     chromeOptions.addArguments(`password=${password}`)
             //     console.log('proxy', url)
             // }
-
             console.log('chromeOptuions', JSON.stringify(chromeOptions))
             var firefoxOptions = new firefox.Options();
-            firefoxOptions.addArguments("start-maximized")
+            firefoxOptions.addArguments("start-maximized");
+            // firefoxOptions.setProfile()
             // firefoxOptions.setBinary("C:\\Program Files\\Mozilla Firefox\\firefox.exe");
             // firefoxOptions.useGeckoDriver(true)
             var edgeOptions = new edgeDriver.Options();
@@ -121,7 +121,6 @@ class DriveOtomatis {
             driver.setEdgeOptions(edgeOptions)
             // driver.setFirefoxOptions(firefoxOptions)
             var urlServer = `${process.env.SELENIUM_HUB_HOST}:${process.env.SELENIUM_HUB_PORT}`;
-            console.log('SELENIUM_HUB', urlServer)
             driver.usingServer(`${urlServer}`)
             // driver.setFirefoxService(new firefox.ServiceBuilder('geckodriver.exe'))
             console.log("dasda", JSON.stringify(driver))
