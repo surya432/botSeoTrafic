@@ -246,7 +246,7 @@ class DriveOtomatis {
             if (getSearchLink.length == 0) {
                 var searching = true, pagesearch = 1;
                 var scrollGOogle = 0
-                for (let index = 0; index <= 15; index++) {
+                for (let index = 0; pagesearch <= 15; index++) {
                     await this.driver.executeScript(`window.scrollTo(0,5000);`);
                     await this.driver.sleep(getRndInteger(1000, 2000));
                     // await this.driver.executeScript(`window.scrollTo(0,-5000);`);
