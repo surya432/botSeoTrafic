@@ -546,7 +546,7 @@ const run = async () => {
     } catch (error) {
         console.log(error);
     } finally {
-        if (process.env.PRODUCTION) {
+        if (process.env.PRODUCTION == "true") {
             run()
         }
     }
