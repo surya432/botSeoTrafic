@@ -111,19 +111,16 @@ class BrowserDriver {
             edgeOptions.set("useAutomationExtension", false);
             edgeOptions.addArguments("start-maximized");
             var driver = new Builder();
-            const listBrowser = [
-                // Browser.CHROME,
-                // Browser.CHROME,
-                // Browser.CHROME,
-                Browser.FIREFOX,
-                // Browser.CHROME,
-                // Browser.CHROME,
-                // Browser.CHROME,
-                Browser.EDGE,
-                // Browser.CHROME,
-                // Browser.CHROME,
-                Browser.CHROME,
-            ];
+            var listBrowser = [];
+            if (process.env.CHROME == "TRUE") {
+                listBrowser.push(Browser.CHROME)
+            }
+            if (process.env.FIREFOX == "TRUE") {
+                listBrowser.push(Browser.FIREFOX)
+            }
+            if (process.env.EDGE == "TRUE") {
+                listBrowser.push(Browser.EDGE)
+            }
             const browserSelected =
                 listBrowser[Math.floor(Math.random() * listBrowser.length)];
             driver.forBrowser(browserSelected);
