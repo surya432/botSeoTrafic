@@ -19,7 +19,7 @@ class WebsiteSEO extends BrowserDriver {
 			await this.sleep(2000, 5000);
 			const getCurrentUrl = await this.driver.getCurrentUrl();
 			if (!this.url.includes(getCurrentUrl)) {
-				throw Error("Url Yang ditujuh Salah");
+				throw new Error("Url Yang ditujuh Salah");
 			}
 			await this.searchDestinationUrl();
 			await this.sleep(5000, 8000);
