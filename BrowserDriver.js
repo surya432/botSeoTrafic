@@ -88,8 +88,8 @@ class BrowserDriver {
             chromeOptions.addArguments("log-level=3");
             chromeOptions.addArguments("disable-logging");
             let x = temp;
-            // chromeOptions.addArguments(`profile-directory=${prs}`);
-            // chromeOptions.addArguments(`user-data-dir=${x}`);
+            chromeOptions.addArguments(`profile-directory=${prs}`);
+            chromeOptions.addArguments(`user-data-dir=${x}`);
             // const randomOS = [Platform.MAC, Platform.LINUX, Platform.WINDOWS];
             // chromeOptions.setPlatform(randomOS[Math.floor(Math.random() * randomOS.length)])
             // const deviceName = ['iPhone SE', 'iPhone XR', 'iPhone 12 Pro', 'iPhone X',    'PIXEL 5'];
@@ -113,7 +113,7 @@ class BrowserDriver {
                 // Browser.CHROME,
                 // Browser.CHROME,
                 // Browser.CHROME,
-                // Browser.FIREFOX,
+                Browser.FIREFOX,
                 // Browser.CHROME,
                 // Browser.CHROME,
                 // Browser.CHROME,
