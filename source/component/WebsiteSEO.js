@@ -92,6 +92,10 @@ class WebsiteSEO extends BrowserDriver {
 			} else {
 				const actions = new Actions({ async: true });
 				await actions.sendKeys(Key.SPACE).perform();
+				var scrollTop = await this.driver.executeScript(
+					"return document.documentElement.scrollTop"
+				);
+				scrollPosisi = scrollTop;
 			}
 		}
 	}
