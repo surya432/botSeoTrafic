@@ -119,7 +119,7 @@ class BrowserDriver {
                 // Browser.CHROME,
                 // Browser.CHROME,
                 // Browser.CHROME,
-                // Browser.EDGE,
+                Browser.EDGE,
                 // Browser.CHROME,
                 // Browser.CHROME,
                 Browser.CHROME,
@@ -196,8 +196,9 @@ class BrowserDriver {
             if (tabtujuan != "") return;
             await this.driver.switchTo().window(tabtujuan);
             await this.driver.sleep(getRndInteger(13000, 60000));
+            console.log("SeoSosmed ", { url, error });
         } catch (error) {
-            console.log("SeoSosmed err" + url, error);
+            console.log("SeoSosmed err", { url, error });
             return;
         }
     }
@@ -327,9 +328,10 @@ class BrowserDriver {
                 // console.log({ pageup, scroll, watchingTime: this.watchingTime })
             } while (this.watchingTime <= stayMaxTime);
             await this.driver.sleep(getRndInteger(20000, 40000));
+            console.log("SEOWebsite ", { url, error });
             return;
         } catch (error) {
-            console.error("SEOWebsite " + url, error);
+            console.error("Error SEOWebsite ", { url, error });
         }
     }
     async youtube_parser(url) {
@@ -418,9 +420,10 @@ class BrowserDriver {
                 // );
                 // console.log("watching " + this.watchingTime >= watchingTimeLimit);
             } while (this.watchingTime <= watchingTimeLimit);
+            console.log("SEOYoutube ", { url, keyword });
             return;
         } catch (error) {
-            console.error("SEOYoutube " + url, error);
+            console.error("Error SEOYoutube ", { url, keyword });
             return;
         }
     }
