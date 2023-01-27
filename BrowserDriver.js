@@ -65,7 +65,7 @@ class BrowserDriver {
         try {
             var temp = "/tmp/chrome_profiles/" + getRndInteger(2000, 13000);
             if (platform.includes("win")) {
-                temp = "C:\\temp\\" + getRndInteger(2000, 13000);
+                temp = "D:\\temp\\" + getRndInteger(2000, 13000);
             }
             const prs = getRndInteger(2000, 13000);
             // console.log("chormepath", { path: chromePaths.chrome, temp });
@@ -268,10 +268,7 @@ class BrowserDriver {
                             By.xpath(`//a[contains(@id,'pnnext')]`)
                         );
                         if (sd2.length > 0) {
-                            var sd = await this.driver.findElement(
-                                By.xpath(`//a[contains(@href,'search?q=')]`)
-                            );
-                            sd.click();
+                            pagesearch = 15
                         } else if (sd3.length > 0) {
                             sd.click();
                         }
@@ -281,7 +278,6 @@ class BrowserDriver {
                 }
                 if (!isFound) {
                     throw new Error("Gagal searching link")
-                    return;
                 }
             } else {
                 await this.driver.executeScript(`window.scrollTo(0,5000);`);
