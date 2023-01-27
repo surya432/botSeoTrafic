@@ -325,7 +325,7 @@ class BrowserDriver {
                 // console.log({ pageup, scroll, watchingTime: this.watchingTime })
             } while (this.watchingTime <= stayMaxTime);
             await this.driver.sleep(getRndInteger(20000, 40000));
-            console.log("SEOWebsite ", { url, keyword, error });
+            console.log("SEOWebsite ", { url, keyword });
             return;
         } catch (error) {
             console.error("Error SEOWebsite ", { url, keyword, error });
