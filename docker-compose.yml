@@ -29,9 +29,9 @@ services:
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
       - SE_NODE_MAX_SESSIONS=10
       - SE_NODE_OVERRIDE_MAX_SESSIONS=true
-    volumes:
-      - /dev/shm:/dev/shm
-      - /tmp/chrome:/tmp/chrome_profiles
+    # volumes:
+    #   - /dev/shm:/dev/shm
+    #   - /tmp/chrome:/tmp/chrome_profiles
   edge:
     image: selenium/node-edge
     shm_size: 1gb
