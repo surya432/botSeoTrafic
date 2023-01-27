@@ -196,9 +196,9 @@ class BrowserDriver {
             if (tabtujuan != "") return;
             await this.driver.switchTo().window(tabtujuan);
             await this.driver.sleep(getRndInteger(13000, 60000));
-            console.log("SeoSosmed ", { url, error });
+            console.log("SeoSosmed ", { url, keyword, error });
         } catch (error) {
-            console.log("SeoSosmed err", { url, error });
+            console.log("SeoSosmed err", { url, keyword, error });
             return;
         }
     }
@@ -292,7 +292,7 @@ class BrowserDriver {
             }
             await this.driver.sleep(getRndInteger(3000, 5000));
             const getCurrentUrl = await this.driver.getCurrentUrl();
-            console.log("getCurrentUrl", getCurrentUrl);
+            // console.log("getCurrentUrl", getCurrentUrl);
             if (!urlVideo.includes(getCurrentUrl)) {
                 return;
             }
@@ -328,10 +328,10 @@ class BrowserDriver {
                 // console.log({ pageup, scroll, watchingTime: this.watchingTime })
             } while (this.watchingTime <= stayMaxTime);
             await this.driver.sleep(getRndInteger(20000, 40000));
-            console.log("SEOWebsite ", { url, error });
+            console.log("SEOWebsite ", { url, keyword, error });
             return;
         } catch (error) {
-            console.error("Error SEOWebsite ", { url, error });
+            console.error("Error SEOWebsite ", { url, keyword, error });
         }
     }
     async youtube_parser(url) {
@@ -423,7 +423,7 @@ class BrowserDriver {
             console.log("SEOYoutube ", { url, keyword });
             return;
         } catch (error) {
-            console.error("Error SEOYoutube ", { url, keyword });
+            console.error("Error SEOYoutube ", { url, keyword, error });
             return;
         }
     }
