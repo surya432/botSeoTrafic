@@ -1,1 +1,1 @@
-java -jar selenium-server-4.7.2.jar -role node -nodeConfig nodeConfig.json
+java -jar selenium-server-4.7.2.jar  node --config nodeConfig.json

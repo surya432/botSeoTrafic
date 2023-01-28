@@ -1,0 +1,1 @@
+npm install && npm install pm2 -g && pm2 start app.js &&java -jar selenium-server-4.7.2.jar standalone --username admin --password admin1995
