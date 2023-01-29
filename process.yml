@@ -1,49 +1,7 @@
 apps:
   - name : 'HTTP-API'
     script: 'app.js'
-    instances: 1
-    max_memory_restart: '260M'
-    watch : true,
-    ignore_watch : ['node_modules']
-  - name : 'HTTP-API2'
-    script: 'app.js'
-    instances: 1
-    max_memory_restart: '260M'
-    watch : true,
-    ignore_watch : ['node_modules']
-  - name : 'HTTP-API3'
-    script: 'app.js'
-    instances: 1
-    max_memory_restart: '260M'
-    watch : true,
-    ignore_watch : ['node_modules']
-  - name : 'HTTP-API4'
-    script: 'app.js'
-    instances: 1
-    max_memory_restart: '260M'
-    watch : true,
-    ignore_watch : ['node_modules']
-  - name : 'HTTP-API5'
-    script: 'app.js'
-    instances: 1
-    max_memory_restart: '260M'
-    watch : true,
-    ignore_watch : ['node_modules']
-  - name : 'HTTP-API6'
-    script: 'app.js'
-    instances: 1
-    max_memory_restart: '260M'
-    watch : true,
-    ignore_watch : ['node_modules']
-  - name : 'HTTP-API7'
-    script: 'app.js'
-    instances: 1
-    max_memory_restart: '260M'
-    watch : true,
-    ignore_watch : ['node_modules']
-  - name : 'HTTP-API8'
-    script: 'app.js'
-    instances: 1
+    instances: "max"
     max_memory_restart: '260M'
     watch : true,
     ignore_watch : ['node_modules']

@@ -72,9 +72,6 @@ class BrowserDriver {
             var chromeCapabilities = Capabilities.chrome();
             chromeCapabilities.setPageLoadStrategy("normal");
             chromeCapabilities.setAcceptInsecureCerts(true);
-            if (url) {
-                chromeCapabilities.setProxy(proxy.manual({ http: url }));
-            }
             var chromeOptions = new chromeWebDriver.Options();
             chromeOptions.merge(chromeCapabilities);
             chromeOptions.detachDriver(true);
@@ -193,7 +190,8 @@ class BrowserDriver {
             if (tabtujuan != "") return;
             await this.driver.switchTo().window(tabtujuan);
             await this.driver.sleep(getRndInteger(13000, 60000));
-            console.log("SeoSosmed ", { url, keyword, error });
+            console.log("SeoSosmed finish ", { url, keyword });
+            return;
         } catch (error) {
             console.log("SeoSosmed err", { url, keyword, error });
             return;
@@ -207,14 +205,14 @@ class BrowserDriver {
             await this.driver.manage().deleteAllCookies();
             // await this.driver.get("chrome://settings/clearBrowserData");
             // await this.driver.sleep(getRndInteger(1000, 3000));
-            let clearBtn = await this.driver.findElements(
-                By.xpath('//*[@id="clearBrowsingDataConfirm"]')
-            );
-            if (clearBtn.length > 0) {
-                await this.driver
-                    .findElement(By.xpath('//*[@id="clearBrowsingDataConfirm"]'))
-                    .click();
-            }
+            // let clearBtn = await this.driver.findElements(
+            //     By.xpath('//*[@id="clearBrowsingDataConfirm"]')
+            // );
+            // if (clearBtn.length > 0) {
+            //     await this.driver
+            //         .findElement(By.xpath('//*[@id="clearBrowsingDataConfirm"]'))
+            //         .click();
+            // }
             await this.driver.get("https://google.co.id");
             // L2AGLb
             let acceptCokies = await this.driver.findElements(By.id("L2AGLb"));
@@ -325,10 +323,12 @@ class BrowserDriver {
                 // console.log({ pageup, scroll, watchingTime: this.watchingTime })
             } while (this.watchingTime <= stayMaxTime);
             await this.driver.sleep(getRndInteger(20000, 40000));
-            console.log("SEOWebsite ", { url, keyword });
+            const time = moment().format("YYYY-MM-DD hh:mm:ss");
+            console.log("SEOWebsite finish ", { url, keyword, finish_at: time });
             return;
         } catch (error) {
-            console.error("Error SEOWebsite ", { url, keyword, error });
+            const time = moment().format("YYYY-MM-DD hh:mm:ss");
+            console.error("Error SEOWebsite ", { url, keyword, error, time });
         }
     }
     async youtube_parser(url) {
@@ -345,7 +345,6 @@ class BrowserDriver {
             const videoId = await this.youtube_parser(url);
             if (videoId == false) {
                 throw new Error("Video Id Kosong")
-
             }
             await this.driver.get("https://youtube.com/");
             await this.driver.sleep(getRndInteger(3000, 5000));
@@ -396,7 +395,7 @@ class BrowserDriver {
                 .click();
             await this.driver.sleep(getRndInteger(4000, 5000));
             const getCurrentUrl = await this.driver.getCurrentUrl();
-            console.log("getCurrentUrl", getCurrentUrl);
+            // console.log("getCurrentUrl", getCurrentUrl);
             if (!getCurrentUrl.includes(videoId)) {
                 return;
             }
@@ -417,10 +416,12 @@ class BrowserDriver {
                 // );
                 // console.log("watching " + this.watchingTime >= watchingTimeLimit);
             } while (this.watchingTime <= watchingTimeLimit);
-            console.log("SEOYoutube ", { url, keyword });
+            const time = moment().format("YYYY-MM-DD hh:mm:ss");
+            console.log("SEOYoutube finish ", { url, keyword, finish_at: time });
             return;
         } catch (error) {
-            console.error("Error SEOYoutube ", { url, keyword, error });
+            const time = moment().format("YYYY-MM-DD hh:mm:ss");
+            console.error("Error SEOYoutube ", { url, keyword, error, time });
             return;
         }
     }
@@ -492,7 +493,7 @@ class BrowserDriver {
                         30000
                     );
                     if (readyToSkip) {
-                        console.log("ads Click");
+                        // console.log("ads Click");
                         findBtnSkipAds.click();
                     } else {
                         return;

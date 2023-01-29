@@ -28,7 +28,7 @@ const run = async () => {
     } catch (error) {
         console.error("error run ", error);
     } finally {
-        run()
+        // run()
     }
     // } while (true);
 };

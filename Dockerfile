@@ -1,5 +1,3 @@
-ARG A_VARIABLE
-
 FROM node:16-alpine
 
 WORKDIR /app
