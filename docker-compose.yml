@@ -27,8 +27,8 @@ services:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-      - SE_NODE_MAX_SESSIONS=4
-      - SE_NODE_MAX_INSTANCES=2
+      - SE_NODE_MAX_SESSIONS=${SE_NODE_MAX_SESSIONS}
+      - SE_NODE_MAX_INSTANCES=${SE_NODE_MAX_INSTANCES}
       - SE_NODE_OVERRIDE_MAX_SESSIONS=true
     # volumes:
     #   - /dev/shm:/dev/shm
@@ -43,8 +43,8 @@ services:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-      - SE_NODE_MAX_SESSIONS=4
-      - SE_NODE_MAX_INSTANCES=2
+      - SE_NODE_MAX_SESSIONS=${SE_NODE_MAX_SESSIONS}
+      - SE_NODE_MAX_INSTANCES=${SE_NODE_MAX_INSTANCES}
       - SE_NODE_OVERRIDE_MAX_SESSIONS=true
   firefox:
     image: selenium/node-firefox
@@ -56,16 +56,16 @@ services:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-      - SE_NODE_MAX_INSTANCES=2
-      - SE_NODE_MAX_SESSIONS=4
+      - SE_NODE_MAX_INSTANCES=${SE_NODE_MAX_INSTANCES}
+      - SE_NODE_MAX_SESSIONS=${SE_NODE_MAX_SESSIONS}
       - SE_NODE_OVERRIDE_MAX_SESSIONS=true
   selenium-hub:
     image: selenium/hub
     container_name: selenium-hub
     restart: always
     environment:
-      - SE_SESSION_REQUEST_TIMEOUT=1200
-      - SE_SESSION_RETRY_INTERVAL=10
+      - SE_SESSION_REQUEST_TIMEOUT=10
+      - SE_SESSION_RETRY_INTERVAL=1
     ports:
       - "4442:4442"
       - "4443:4443"
