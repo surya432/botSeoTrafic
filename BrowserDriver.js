@@ -14,7 +14,6 @@ const {
     Actions,
 } = require("selenium-webdriver");
 var rimraf = require("rimraf");
-
 const chromedriverPath = require("chromedriver").path;
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -72,6 +71,7 @@ class BrowserDriver {
             var chromeCapabilities = Capabilities.chrome();
             chromeCapabilities.setPageLoadStrategy("normal");
             chromeCapabilities.setAcceptInsecureCerts(true);
+            // chromeCapabilities.setProxy({ proxyType: "manual", httpProxy: url, sslProxy: url, socksUsername: username, socksPassword: password })
             var chromeOptions = new chromeWebDriver.Options();
             chromeOptions.merge(chromeCapabilities);
             chromeOptions.detachDriver(true);
@@ -88,7 +88,7 @@ class BrowserDriver {
             if (platform.includes("win")) {
                 chromeOptions.addArguments(`profile-directory=${prs}`);
                 chromeOptions.addArguments(`user-data-dir=${x}`);
-            }
+            }            
             // const randomOS = [Platform.MAC, Platform.LINUX, Platform.WINDOWS];
             // chromeOptions.setPlatform(randomOS[Math.floor(Math.random() * randomOS.length)])
             // const deviceName = ['iPhone SE', 'iPhone XR', 'iPhone 12 Pro', 'iPhone X',    'PIXEL 5'];
@@ -127,6 +127,10 @@ class BrowserDriver {
             driver.setFirefoxOptions(firefoxOptions);
             var urlServer = `${process.env.SELENIUM_HUB_HOST}:${process.env.SELENIUM_HUB_PORT}`;
             driver.usingServer(`${urlServer}`);
+            if (url != "") {
+                driver.setProxy({ proxyType: "manual", httpProxy: url, sslProxy: url, socksUsername: username, socksPassword: password })
+            }
+            // driver.usingWebDriverProxy(url)
             // driver.setFirefoxService(new firefox.ServiceBuilder('geckodriver.exe'))
             // console.log("dasda", JSON.stringify(driver));
             this.driver = driver.build();
@@ -141,6 +145,8 @@ class BrowserDriver {
         if (this.driver == null) {
             return;
         }
+        const prs = await this.driver.getCapabilities();
+        console.log(prs)
         await this.driver.get(
             "https://www.whatismybrowser.com/detect/what-is-my-user-agent/"
         );

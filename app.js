@@ -11,7 +11,7 @@ const run = async () => {
         // const proxy = await getProxyFree();
         // console.log("sta", JSON.stringify(url));
         const Drive = new BrowserDriver({
-            url: "",
+            url: `${process.env.PROXY}`,
             username: "surya432",
             password: "surya4321",
         });

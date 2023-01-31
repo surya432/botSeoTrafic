@@ -11,19 +11,19 @@ const run = async () => {
         // const proxy = await getProxyFree();
         // console.log("sta", JSON.stringify(url));
         const Drive = new BrowserDriver({
-            url: "",
-            username: "surya432",
-            password: "surya4321",
+            url: `${process.env.PROXY}`,
+            username: "admin",
+            password: "adminadmin1995",
         });
         // const Drive = new DriveOtomatis({ url: proxy, username: 'surya123-1', password: 'surya432' });
-        // await Drive.myIp();
-        if (url.type == "google") {
-            await Drive.SeoWebsite(url);
-        } else if (url.type == "backlink") {
-            await Drive.SeoSosmed(url);
-        } else if (url.type == "youtube") {
-            await Drive.SeoYoutube(url);
-        }
+        await Drive.myIp();
+        // if (url.type == "google") {
+        //     await Drive.SeoWebsite(url);
+        // } else if (url.type == "backlink") {
+        //     await Drive.SeoSosmed(url);
+        // } else if (url.type == "youtube") {
+        //     await Drive.SeoYoutube(url);
+        // }
         await Drive.removeDrive();
     } catch (error) {
         console.error("error run ", error);
