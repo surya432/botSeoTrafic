@@ -16,7 +16,7 @@ services:
       - SELENIUM_HUB_PORT=${SELENIUM_HUB_PORT}
       - PRODUCTION=${PRODUCTION}
       - NODE=${NODE}
-
+      - TZ=Asia/Jakarta
   chrome:
     image: selenium/node-chrome
     shm_size: 1gb
@@ -59,13 +59,15 @@ services:
       - SE_NODE_MAX_INSTANCES=${SE_NODE_MAX_INSTANCES}
       - SE_NODE_MAX_SESSIONS=${SE_NODE_MAX_SESSIONS}
       - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - TZ=Asia/Jakarta
   selenium-hub:
     image: selenium/hub
     container_name: selenium-hub
     restart: always
     environment:
-      - SE_SESSION_REQUEST_TIMEOUT=10
+      - SE_SESSION_REQUEST_TIMEOUT=1
       - SE_SESSION_RETRY_INTERVAL=1
+      - TZ=Asia/Jakarta
     ports:
       - "4442:4442"
       - "4443:4443"

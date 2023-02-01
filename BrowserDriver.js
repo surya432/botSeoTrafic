@@ -393,8 +393,6 @@ class BrowserDriver {
 
             if (!isFound) {
                 throw new Error("Gagal searching video by id")
-
-                return;
             }
             await this.driver
                 .findElement(By.xpath(`//a[contains(@href,'${videoId}')]`))
