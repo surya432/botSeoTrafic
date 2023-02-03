@@ -81,10 +81,25 @@ services:
       - SE_NODE_MAX_INSTANCES=${SE_NODE_MAX_INSTANCES}
       - SE_NODE_OVERRIDE_MAX_SESSIONS=true
       - TZ=Asia/Jakarta
-  firefox:
+  firefox_01:
     image: selenium/node-firefox
     shm_size: 1gb
     container_name: firefox_01
+    restart: always
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_INSTANCES=${SE_NODE_MAX_INSTANCES}
+      - SE_NODE_MAX_SESSIONS=${SE_NODE_MAX_SESSIONS}
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - TZ=Asia/Jakarta
+  firefox_02:
+    image: selenium/node-firefox
+    shm_size: 1gb
+    container_name: firefox_02
     restart: always
     depends_on:
       - selenium-hub
