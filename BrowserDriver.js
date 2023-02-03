@@ -305,7 +305,7 @@ class BrowserDriver {
             var pageup = false
             // console.log('scrollHeight', scrollHeight)
             this.watchingTime = 0;
-            var stayMaxTime = getRndInteger(60000, 180000)
+            var stayMaxTime = getRndInteger(120000, 300000)
             do {
                 if (pageup == false) {
                     scroll = scroll + getRndInteger(100, 340);
@@ -328,7 +328,7 @@ class BrowserDriver {
 
                 // console.log({ pageup, scroll, watchingTime: this.watchingTime })
             } while (this.watchingTime <= stayMaxTime);
-            await this.driver.sleep(getRndInteger(20000, 40000));
+            // await this.driver.sleep(getRndInteger(20000, 40000));
             const time = moment().format("YYYY-MM-DD hh:mm:ss");
             console.log("SEOWebsite finish ", { url, keyword, finish_at: time });
             return;
@@ -370,7 +370,7 @@ class BrowserDriver {
             var pageup = false
             // console.log('scrollHeight', scrollHeight)
             this.watchingTime = 0;
-            var stayMaxTime = getRndInteger(60000, 180000)
+            var stayMaxTime = getRndInteger(120000, 300000)
             do {
                 if (pageup == false) {
                     scroll = scroll + getRndInteger(100, 340);
@@ -393,7 +393,7 @@ class BrowserDriver {
 
                 console.log({ pageup, scroll, watchingTime: this.watchingTime })
             } while (this.watchingTime <= stayMaxTime);
-            await this.driver.sleep(getRndInteger(20000, 40000));
+            // await this.driver.sleep(getRndInteger(20000, 40000));
             const time = moment().format("YYYY-MM-DD hh:mm:ss");
             console.log("SEOWebsite finish ", { url, keyword, finish_at: time });
             return;
