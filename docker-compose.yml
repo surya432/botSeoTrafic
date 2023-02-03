@@ -13,6 +13,7 @@ services:
       - selenium-hub
     environment:
       - SELENIUM_HUB_HOST=${SELENIUM_HUB}
+      - SE_EVENT_BUS_HOST=selenium-hub
       - SELENIUM_HUB_PORT=${SELENIUM_HUB_PORT}
       - PRODUCTION=${PRODUCTION}
       - NODE=${NODE}
@@ -30,6 +31,7 @@ services:
       - SE_NODE_MAX_SESSIONS=${SE_NODE_MAX_SESSIONS}
       - SE_NODE_MAX_INSTANCES=${SE_NODE_MAX_INSTANCES}
       - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - TZ=Asia/Jakarta
     # volumes:
     #   - /dev/shm:/dev/shm
     #   - /tmp/chrome:/tmp/chrome_profiles
@@ -46,6 +48,7 @@ services:
       - SE_NODE_MAX_SESSIONS=${SE_NODE_MAX_SESSIONS}
       - SE_NODE_MAX_INSTANCES=${SE_NODE_MAX_INSTANCES}
       - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - TZ=Asia/Jakarta
   firefox:
     image: selenium/node-firefox
     shm_size: 1gb
@@ -65,8 +68,6 @@ services:
     container_name: selenium-hub
     restart: always
     environment:
-      - SE_SESSION_REQUEST_TIMEOUT=1
-      - SE_SESSION_RETRY_INTERVAL=1
       - TZ=Asia/Jakarta
     ports:
       - "4442:4442"

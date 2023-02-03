@@ -88,7 +88,7 @@ class BrowserDriver {
             if (platform.includes("win")) {
                 chromeOptions.addArguments(`profile-directory=${prs}`);
                 chromeOptions.addArguments(`user-data-dir=${x}`);
-            }            
+            }
             // const randomOS = [Platform.MAC, Platform.LINUX, Platform.WINDOWS];
             // chromeOptions.setPlatform(randomOS[Math.floor(Math.random() * randomOS.length)])
             // const deviceName = ['iPhone SE', 'iPhone XR', 'iPhone 12 Pro', 'iPhone X',    'PIXEL 5'];
@@ -293,8 +293,8 @@ class BrowserDriver {
             }
             await this.driver.sleep(getRndInteger(3000, 5000));
             const getCurrentUrl = await this.driver.getCurrentUrl();
-            // console.log("getCurrentUrl", getCurrentUrl);
-            if (!urlVideo.includes(getCurrentUrl)) {
+            console.log("getCurrentUrl", getCurrentUrl);
+            if (!getCurrentUrl.includes(url)) {
                 return;
             }
             await this.driver.sleep(getRndInteger(3000, 9000));
@@ -327,6 +327,71 @@ class BrowserDriver {
                 }
 
                 // console.log({ pageup, scroll, watchingTime: this.watchingTime })
+            } while (this.watchingTime <= stayMaxTime);
+            await this.driver.sleep(getRndInteger(20000, 40000));
+            const time = moment().format("YYYY-MM-DD hh:mm:ss");
+            console.log("SEOWebsite finish ", { url, keyword, finish_at: time });
+            return;
+        } catch (error) {
+            const time = moment().format("YYYY-MM-DD hh:mm:ss");
+            console.error("Error SEOWebsite ", { url, keyword, error, time });
+        }
+    }
+    async WebsiteDirect({ url, keyword }) {
+        try {
+            if (this.driver == null) {
+                throw new Error("driver not found")
+            }
+            await this.driver.manage().deleteAllCookies();
+            // await this.driver.get("chrome://settings/clearBrowserData");
+            // await this.driver.sleep(getRndInteger(1000, 3000));
+            // let clearBtn = await this.driver.findElements(
+            //     By.xpath('//*[@id="clearBrowsingDataConfirm"]')
+            // );
+            // if (clearBtn.length > 0) {
+            //     await this.driver
+            //         .findElement(By.xpath('//*[@id="clearBrowsingDataConfirm"]'))
+            //         .click();
+            // }
+            const urlVideo = url;
+            await this.driver.get(url);
+
+            await this.driver.sleep(getRndInteger(3000, 5000));
+            const getCurrentUrl = await this.driver.getCurrentUrl();
+            console.log("getCurrentUrl", getCurrentUrl);
+            if (!getCurrentUrl.includes(url)) {
+                return;
+            }
+            await this.driver.sleep(getRndInteger(3000, 9000));
+            let scroll = 0;
+            var scrollHeight = await this.driver.executeScript(
+                "return document.documentElement.scrollHeight"
+            );
+            var pageup = false
+            // console.log('scrollHeight', scrollHeight)
+            this.watchingTime = 0;
+            var stayMaxTime = getRndInteger(60000, 180000)
+            do {
+                if (pageup == false) {
+                    scroll = scroll + getRndInteger(100, 340);
+                } else {
+                    scroll = scroll - getRndInteger(100, 340);
+                }
+                await this.driver.executeScript(`window.scrollTo(0,${scroll});`);
+                const timeStay = getRndInteger(2000, 5000);
+                this.watchingTime += timeStay
+                await this.driver.sleep(timeStay);
+                if (scroll >= scrollHeight) {
+                    pageup = true
+                    await this.driver.sleep(getRndInteger(10000, 15000));
+                } else if (pageup == true && scroll >= scrollHeight) {
+                    pageup = false
+                    await this.driver.sleep(getRndInteger(10000, 15000));
+                } else if (pageup == true && scroll <= 0) {
+                    pageup = false
+                }
+
+                console.log({ pageup, scroll, watchingTime: this.watchingTime })
             } while (this.watchingTime <= stayMaxTime);
             await this.driver.sleep(getRndInteger(20000, 40000));
             const time = moment().format("YYYY-MM-DD hh:mm:ss");

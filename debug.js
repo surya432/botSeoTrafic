@@ -2,6 +2,7 @@ require('dotenv').config();
 const { default: axios } = require("axios");
 const { BrowserDriver } = require("./BrowserDriver");
 const run = async () => {
+    var DriveBrowser = null;
     // do {
     try {
         const resp = await axios.get(`https://api.npoint.io/670f5527b2d722e4d2bf`);
@@ -10,25 +11,33 @@ const run = async () => {
         // const url = { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "google" }
         // const proxy = await getProxyFree();
         // console.log("sta", JSON.stringify(url));
-        const Drive = new BrowserDriver({
-            url: `${process.env.PROXY}`,
-            username: "admin",
-            password: "adminadmin1995",
+        // Drive = new DriveOtomatis({ url: proxy, username: 'surya123-1', password: 'surya432' });
+        // await Drive.myIp();
+        DriveBrowser = new BrowserDriver({
+            url: url.proxy ?? "",
+            username: url.proxyusername ?? "",
+            password: url.proxypassword ?? "",
         });
-        // const Drive = new DriveOtomatis({ url: proxy, username: 'surya123-1', password: 'surya432' });
-        await Drive.myIp();
-        // if (url.type == "google") {
-        //     await Drive.SeoWebsite(url);
-        // } else if (url.type == "backlink") {
-        //     await Drive.SeoSosmed(url);
-        // } else if (url.type == "youtube") {
-        //     await Drive.SeoYoutube(url);
-        // }
-        await Drive.removeDrive();
+        if (url.type == "google") {
+
+            await DriveBrowser.SeoWebsite(url);
+            await DriveBrowser.removeDrive();
+        }
+        if (url.type == "direct") {
+            await DriveBrowser.WebsiteDirect(url);
+            await DriveBrowser.removeDrive();
+        }
+        if (url.type == "backlink") {
+            await DriveBrowser.SeoSosmed(url);
+            await DriveBrowser.removeDrive();
+        }
+        if (url.type == "youtube") {
+            await DriveBrowser.SeoYoutube(url);
+            await DriveBrowser.removeDrive();
+        }
     } catch (error) {
         console.error("error run ", error);
-    } finally {
-        // run()
+        await DriveBrowser.removeDrive()
     }
     // } while (true);
 };
