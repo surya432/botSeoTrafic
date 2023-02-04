@@ -101,7 +101,7 @@ class BrowserDriver {
             // chromeOptions.addArguments(`profile-directory=${profile_name}`);
             // console.log("chromeOptuions", JSON.stringify(chromeOptions));
             var firefoxOptions = new firefox.Options();
-            firefoxOptions.addArguments("start-maximized");
+            // firefoxOptions.addArguments("start-maximized");
             var edgeOptions = new edgeDriver.Options();
             edgeOptions.detachDriver(true);
             edgeOptions.excludeSwitches(["enable-automation", "enable-logging"]);
