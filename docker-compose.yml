@@ -3,24 +3,24 @@
 # To stop the execution, hit Ctrl+C, and then docker-compose -f docker-compose-v3.yml down
 version: "3"
 services:
-  webdriver:
-    build: 
-      context: .
-      dockerfile: Dockerfile
-    container_name: webdriverclient
-    restart: always
-    depends_on:
-      - selenium-hub
-      - chrome
-      - edge
-      - firefox
-    environment:
-      - SELENIUM_HUB_HOST=${SELENIUM_HUB}
-      - SE_EVENT_BUS_HOST=selenium-hub
-      - SELENIUM_HUB_PORT=${SELENIUM_HUB_PORT}
-      - PRODUCTION=${PRODUCTION}
-      - NODE=${NODE}
-      - TZ=Asia/Jakarta
+  # webdriver:
+  #   build: 
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: webdriverclient
+  #   restart: always
+  #   depends_on:
+  #     - selenium-hub
+  #     - chrome
+  #     - edge
+  #     - firefox
+  #   environment:
+  #     - SELENIUM_HUB_HOST=${SELENIUM_HUB}
+  #     - SE_EVENT_BUS_HOST=selenium-hub
+  #     - SELENIUM_HUB_PORT=${SELENIUM_HUB_PORT}
+  #     - PRODUCTION=${PRODUCTION}
+  #     - NODE=${NODE}
+  #     - TZ=Asia/Jakarta
   chrome:
     container_name: chrome
     image: selenium/node-chrome
