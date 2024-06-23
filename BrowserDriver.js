@@ -127,9 +127,9 @@ class BrowserDriver {
             driver.setChromeOptions(chromeOptions);
             driver.setEdgeOptions(edgeOptions);
             driver.setFirefoxOptions(firefoxOptions);
-            var urlServer = `${process.env.SELENIUM_HUB_HOST}:${process.env.SELENIUM_HUB_PORT}`;
+            var urlServer = `${process.env.SELENIUM_HUB_HOST}:${process.env.SELENIUM_HUB_PORT ?? 4444}`;
             driver.usingServer(`${urlServer}`);
-            
+
             // driver.usingWebDriverProxy(url)
             // driver.setFirefoxService(new firefox.ServiceBuilder('geckodriver.exe'))
             // console.log("dasda", JSON.stringify(driver));

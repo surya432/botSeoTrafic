@@ -38,5 +38,5 @@ const run = async () => {
     }
     // } while (true);
 };
-// run()
-setTimeout(()=>run(),20000);
+run()
+// setTimeout(()=>run(),20000);
