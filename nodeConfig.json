@@ -8,12 +8,12 @@
     ],
     "configuration": {
         "proxy": "org.openqa.grid.selenium.proxy.DefaultRemoteProxy",
-        "maxSession": 5,
+        "maxSession": 1,
         "port": 5555,
-        "host": "109.105.217.178",
+        "host": "localhost",
         "register": true,
         "registerCycle": 5000,
         "hubPort": 44441,
-        "hubHost": "109.105.217.178"
+        "hubHost": "localhost"
     }
 }

@@ -5,10 +5,10 @@ const run = async () => {
     var DriveBrowser = null;
     // do {
     try {
-        const resp = await axios.get(`https://api.npoint.io/670f5527b2d722e4d2bf`);
+        const resp = await axios.get(`https://api.npoint.io/2d3d4d70b0f493e0d2ca`);
         var urlList = resp.data;
         const url = urlList[Math.floor(Math.random() * urlList.length)];
-        // const url = { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "google" }
+        // const url = { keyword: "digitopupstore.com", url: 'https://digitopupstore.com/', type: "direct" }
         // const proxy = await getProxyFree();
         // console.log("sta", JSON.stringify(url));
         // Drive = new DriveOtomatis({ url: proxy, username: 'surya123-1', password: 'surya432' });
@@ -19,29 +19,24 @@ const run = async () => {
             password: url.proxypassword ?? "",
         });
         if (url.type == "google") {
-
             await DriveBrowser.SeoWebsite(url);
-            await DriveBrowser.removeDrive();
         }
         if (url.type == "direct") {
             await DriveBrowser.WebsiteDirect(url);
-            await DriveBrowser.removeDrive();
         }
         if (url.type == "backlink") {
             await DriveBrowser.SeoSosmed(url);
-            await DriveBrowser.removeDrive();
         }
         if (url.type == "youtube") {
             await DriveBrowser.SeoYoutube(url);
-            await DriveBrowser.removeDrive();
         }
+        await DriveBrowser.removeDrive()
     } catch (error) {
         console.error("error run ", error);
-        await DriveBrowser.removeDrive()
-    } finally{
+    } finally {
         run()
     }
     // } while (true);
 };
 // run()
-run();
+setTimeout(()=>run(),20000);

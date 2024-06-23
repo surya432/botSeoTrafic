@@ -107,6 +107,9 @@ class BrowserDriver {
             edgeOptions.excludeSwitches(["enable-automation", "enable-logging"]);
             edgeOptions.set("useAutomationExtension", false);
             edgeOptions.addArguments("start-maximized");
+            if (url != "") {
+                edgeDriver.setProxy({ proxyType: "manual", httpProxy: url, sslProxy: url, socksUsername: username, socksPassword: password })
+            }
             var driver = new Builder();
             var listBrowser = [];
             if (process.env.CHROME == "TRUE") {
@@ -118,18 +121,15 @@ class BrowserDriver {
             if (process.env.EDGE == "TRUE") {
                 listBrowser.push(Browser.EDGE)
             }
-            const browserSelected =
-                listBrowser[Math.floor(Math.random() * listBrowser.length)];
-            driver.forBrowser(browserSelected);
+            const randBrowser = listBrowser[Math.floor(Math.random() * listBrowser.length)];
+            driver.forBrowser(randBrowser);
             // driver.setChromeService(new chromeWebDriver.ServiceBuilder('chromedriver.exe'))
             driver.setChromeOptions(chromeOptions);
             driver.setEdgeOptions(edgeOptions);
             driver.setFirefoxOptions(firefoxOptions);
             var urlServer = `${process.env.SELENIUM_HUB_HOST}:${process.env.SELENIUM_HUB_PORT}`;
             driver.usingServer(`${urlServer}`);
-            if (url != "") {
-                driver.setProxy({ proxyType: "manual", httpProxy: url, sslProxy: url, socksUsername: username, socksPassword: password })
-            }
+            
             // driver.usingWebDriverProxy(url)
             // driver.setFirefoxService(new firefox.ServiceBuilder('geckodriver.exe'))
             // console.log("dasda", JSON.stringify(driver));
@@ -204,6 +204,7 @@ class BrowserDriver {
         }
     }
     async SeoWebsite({ url, keyword }) {
+        const timestart = moment();
         try {
             if (this.driver == null) {
                 throw new Error("driver not found")
@@ -241,6 +242,7 @@ class BrowserDriver {
             let getSearchLink = await this.driver.findElements(
                 By.xpath(`//a[contains(@href,'${urlVideo}')]`)
             );
+            await this.driver.sleep(getRndInteger(10000, 30000));
             if (getSearchLink.length == 0) {
                 var searching = true,
                     pagesearch = 1;
@@ -305,7 +307,7 @@ class BrowserDriver {
             var pageup = false
             // console.log('scrollHeight', scrollHeight)
             this.watchingTime = 0;
-            var stayMaxTime = getRndInteger(120000, 300000)
+            var stayMaxTime = getRndInteger(20000, 30000)
             do {
                 if (pageup == false) {
                     scroll = scroll + getRndInteger(100, 340);
@@ -318,19 +320,18 @@ class BrowserDriver {
                 await this.driver.sleep(timeStay);
                 if (scroll >= scrollHeight) {
                     pageup = true
-                    await this.driver.sleep(getRndInteger(10000, 15000));
+                    await this.driver.sleep(getRndInteger(5000, 15000));
                 } else if (pageup == true && scroll >= scrollHeight) {
                     pageup = false
-                    await this.driver.sleep(getRndInteger(10000, 15000));
+                    await this.driver.sleep(getRndInteger(5000, 15000));
                 } else if (pageup == true && scroll <= 0) {
                     pageup = false
                 }
-
                 // console.log({ pageup, scroll, watchingTime: this.watchingTime })
             } while (this.watchingTime <= stayMaxTime);
-            // await this.driver.sleep(getRndInteger(20000, 40000));
-            const time = moment().format("YYYY-MM-DD hh:mm:ss");
-            console.log("SEOWebsite finish ", { url, keyword, finish_at: time });
+            await this.driver.sleep(getRndInteger(20000, 40000));
+            const time = moment.duration(moment().diff(timestart));
+            console.log("SEOWebsite finish ", { url, keyword, finish_at: time.asSeconds() });
             return;
         } catch (error) {
             const time = moment().format("YYYY-MM-DD hh:mm:ss");

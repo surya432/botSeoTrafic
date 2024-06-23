@@ -3,14 +3,17 @@
 # To stop the execution, hit Ctrl+C, and then docker-compose -f docker-compose-v3.yml down
 version: "3"
 services:
-  webdriver_01:
+  webdriver:
     build: 
       context: .
       dockerfile: Dockerfile
-    container_name: webdriver_01
+    container_name: webdriverclient
     restart: always
     depends_on:
       - selenium-hub
+      - chrome
+      - edge
+      - firefox
     environment:
       - SELENIUM_HUB_HOST=${SELENIUM_HUB}
       - SE_EVENT_BUS_HOST=selenium-hub
@@ -18,23 +21,8 @@ services:
       - PRODUCTION=${PRODUCTION}
       - NODE=${NODE}
       - TZ=Asia/Jakarta
-  webdriver_02:
-    build: 
-      context: .
-      dockerfile: Dockerfile
-    container_name: webdriver_02
-    restart: always
-    depends_on:
-      - selenium-hub
-    environment:
-      - SELENIUM_HUB_HOST=${SELENIUM_HUB}
-      - SE_EVENT_BUS_HOST=selenium-hub
-      - SELENIUM_HUB_PORT=${SELENIUM_HUB_PORT}
-      - PRODUCTION=${PRODUCTION}
-      - NODE=${NODE}
-      - TZ=Asia/Jakarta
-  chrome_02:
-    container_name: chrome_02
+  chrome:
+    container_name: chrome
     image: selenium/node-chrome
     shm_size: 1gb
     restart: always
@@ -47,21 +35,7 @@ services:
       - SE_NODE_MAX_SESSIONS=${SE_NODE_MAX_SESSIONS}
       - SE_NODE_MAX_INSTANCES=${SE_NODE_MAX_INSTANCES}
       - SE_NODE_OVERRIDE_MAX_SESSIONS=true
-      - TZ=Asia/Jakarta
-  chrome_01:
-    container_name: chrome_01
-    image: selenium/node-chrome
-    shm_size: 1gb
-    restart: always
-    depends_on:
-      - selenium-hub
-    environment:
-      - SE_EVENT_BUS_HOST=selenium-hub
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-      - SE_NODE_MAX_SESSIONS=${SE_NODE_MAX_SESSIONS}
-      - SE_NODE_MAX_INSTANCES=${SE_NODE_MAX_INSTANCES}
-      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - VNC_NO_PASSWORD=1
       - TZ=Asia/Jakarta
     # volumes:
     #   - /dev/shm:/dev/shm
@@ -69,7 +43,7 @@ services:
   edge:
     image: selenium/node-edge
     shm_size: 1gb
-    container_name: edge_01
+    container_name: edge
     restart: always
     depends_on:
       - selenium-hub
@@ -80,11 +54,12 @@ services:
       - SE_NODE_MAX_SESSIONS=${SE_NODE_MAX_SESSIONS}
       - SE_NODE_MAX_INSTANCES=${SE_NODE_MAX_INSTANCES}
       - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - VNC_NO_PASSWORD=1
       - TZ=Asia/Jakarta
-  firefox_01:
+  firefox:
     image: selenium/node-firefox
     shm_size: 1gb
-    container_name: firefox_01
+    container_name: firefox
     restart: always
     depends_on:
       - selenium-hub
@@ -95,21 +70,7 @@ services:
       - SE_NODE_MAX_INSTANCES=${SE_NODE_MAX_INSTANCES}
       - SE_NODE_MAX_SESSIONS=${SE_NODE_MAX_SESSIONS}
       - SE_NODE_OVERRIDE_MAX_SESSIONS=true
-      - TZ=Asia/Jakarta
-  firefox_02:
-    image: selenium/node-firefox
-    shm_size: 1gb
-    container_name: firefox_02
-    restart: always
-    depends_on:
-      - selenium-hub
-    environment:
-      - SE_EVENT_BUS_HOST=selenium-hub
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-      - SE_NODE_MAX_INSTANCES=${SE_NODE_MAX_INSTANCES}
-      - SE_NODE_MAX_SESSIONS=${SE_NODE_MAX_SESSIONS}
-      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - VNC_NO_PASSWORD=1
       - TZ=Asia/Jakarta
   selenium-hub:
     image: selenium/hub
